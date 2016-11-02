@@ -9,19 +9,19 @@ function authSpotify() {
   });
 }
 
-function showCreatePlaylistModule() {
+function showCreatePartyModule() {
   $("body").load("overlay.html",function(){
     $(this).clone().appendTo("body").remove();
-    $('#createPlaylistForm').submit(function () {
-      createPlaylist();
+    $('#createPartyForm').submit(function () {
+      createParty();
     });
   });
 
 }
 
-function createPlaylist() {
+function createParty() {
   // get all the inputs into an array.
-  var $inputs = $('#createPlaylistForm :input');
+  var $inputs = $('#createPartyForm :input');
 
   // not sure if you wanted this, but I thought I'd add it.
   // get an associative array of just the values.
