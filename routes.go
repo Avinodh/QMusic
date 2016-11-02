@@ -23,7 +23,12 @@ var routes = Routes{
 		"/",
 		Index,
 	},
-
+	Route{
+		"CreatePartyController",
+		"POST",
+		"/createplaylist",
+		CreatePartyController,
+		},
 	Route{
 		"AuthorizeSpotify",
 		"GET",

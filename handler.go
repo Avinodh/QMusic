@@ -13,6 +13,7 @@ import (
     "io/ioutil"
     "net/http"
     "os"
+    "log"
 )
 
 var (
@@ -94,6 +95,10 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
     // the client can now be used to make authenticated requests
 }
 
+func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
+    r.ParseForm()
+    log.Println(r.Form)
+}
 /************** BEGIN SECTION: HELPER FUNCTIONS *************/
 
 // GenerateRandomBytes returns securely generated random bytes.
