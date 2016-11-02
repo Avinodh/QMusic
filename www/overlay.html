@@ -1,3 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Overlay</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/overlay.css" rel="stylesheet">
+</head>
+<body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Qmusic</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+          </form>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+<div class="jumbotron">
+      <div class="container">
+        <h1>Hola Host!</h1>
+        <p>Welcome to Qmusic. You can easily get started with making your guests enjoy the music at your party more by filling the form out below to set up a new party!</p>
+        <p><a class="btn btn-primary btn-lg" href="index.html" role="button">Learn more &raquo;</a></p>
+      </div>
+    </div>
+<div class = "container">
 <form id="createPlaylistForm">
         <div>
           <h3>Party Form</h3>
@@ -14,6 +59,9 @@
           <label for="active-time" class="ui-hidden-accessible"></label>
           <input type="text" name="active-time" id="active-time" placeholder="Active Time">
 
-          <input type="submit" data-inline="true" value="Create Party!">
+          <button type="button" class="btn btn-success" input type="submit" data-inline="true" value="Create Party!"> Create Party! </button>
         </div>
       </form>
+      </div>
+</body>
+</html>
