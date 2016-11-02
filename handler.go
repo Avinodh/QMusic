@@ -13,7 +13,6 @@ import (
     "io/ioutil"
     "net/http"
     "os"
-    "log"
 )
 
 var (
@@ -97,7 +96,10 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 
 func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
     r.ParseForm()
-    log.Println(r.Form)
+    var pc *Party_Controller = TheMasterController.AddPartyController(r.Form["secret-code"][0])
+    pc.CreateParty(r)
+    fmt.Fprint(rw, "Created new controller ", r.Form)
+
 }
 /************** BEGIN SECTION: HELPER FUNCTIONS *************/
 

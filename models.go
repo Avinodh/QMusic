@@ -1,5 +1,9 @@
 package main
 
+import (
+	"net/http"
+)
+
 type Spotify_User struct {
 	Id          string `json:"uid,Number"`
 	DisplayName string `json:"displayName,Number"`
@@ -8,7 +12,10 @@ type Spotify_User struct {
 
 type Party struct {
 	IsActive bool
+	PartyHost string
 	Location string
+	SecretCode string
+	ActiveTime string
 	MyController *Party_Controller
 }
 
@@ -16,21 +23,35 @@ type Party_Controller struct {
 	Id string
 	Active *Party
 	AuthToken string
+	RefreshToken string
 
 }
+
 
 type Master_Controller struct {
 	PartyControllers map[string]*Party_Controller
 }
 
-func (mc *master_controller) Add_party_controller() bool {
-	var new_pc *Party_controller = new(Party_Controller)
-	new_pc.Id = "rand"
-	new_pc.Active = new(Party)
-	new_pc.Active.IsActive = true
-	new_pc.Active.Location = "xyz"
-	new_pc.Active.MyController = new_pc
-	new_pc.AuthToken = "abcdef"
-	mc.party_controllers[new_pc.Id] = new_pc 
-	return true
+func (pc *Party_Controller) CreateParty(r* http.Request) bool {
+    var new_party *Party = new(Party)
+    new_party.IsActive = true
+    new_party.PartyHost = r.Form["user"][0]
+    new_party.Location = r.Form["location"][0]
+    new_party.SecretCode = r.Form["secret-code"][0]
+    new_party.ActiveTime = r.Form["active-time"][0]
+    pc.Active = new_party
+    return true
 }
+
+func (mc *Master_Controller) AddPartyController(id string) *Party_Controller {
+	mc.PartyControllers[id] = new(Party_Controller) 
+	return mc.PartyControllers[id]
+}
+
+func InitializeController() *Master_Controller{
+	var mc *Master_Controller = new(Master_Controller)
+	mc.PartyControllers = make(map[string]*Party_Controller)
+	return mc
+}
+
+var TheMasterController = InitializeController()
