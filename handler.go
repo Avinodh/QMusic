@@ -87,6 +87,8 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
         ProfilePic:  client_info.User.Images[2].URL,
     }*/
 
+    client_info = client_info
+
     body, _ := ioutil.ReadFile("www/dashboard.html")
     fmt.Fprint(rw, string(body))
     // the client can now be used to make authenticated requests
