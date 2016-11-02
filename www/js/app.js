@@ -1,5 +1,5 @@
 $(document).ready(function($) {
-    
+
 });
 
 function authSpotify() {
@@ -7,4 +7,14 @@ function authSpotify() {
         window.location = data;
         //console.log(data);
     });
+}
+
+function showCreatePlaylistModule() {
+  $("body").load("overlay.html",function(){
+    $(this).clone().appendTo("body").remove();
+  });
+}
+
+function createPlaylist(usrnm, pswd, secretCode, activeTime) {
+  console.log($('#usrnm'));
 }
