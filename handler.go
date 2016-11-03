@@ -99,7 +99,6 @@ func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
     var pc *Party_Controller = TheMasterController.AddPartyController(r.Form["secret-code"][0])
     pc.CreateParty(r)
     fmt.Fprint(rw, "Created new controller ", r.Form)
-
 }
 /************** BEGIN SECTION: HELPER FUNCTIONS *************/
 

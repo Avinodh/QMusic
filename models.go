@@ -24,9 +24,7 @@ type Party_Controller struct {
 	Active *Party
 	AuthToken string
 	RefreshToken string
-
 }
-
 
 type Master_Controller struct {
 	PartyControllers map[string]*Party_Controller
@@ -44,7 +42,7 @@ func (pc *Party_Controller) CreateParty(r* http.Request) bool {
 }
 
 func (mc *Master_Controller) AddPartyController(id string) *Party_Controller {
-	mc.PartyControllers[id] = new(Party_Controller) 
+	mc.PartyControllers[id] = new(Party_Controller)
 	return mc.PartyControllers[id]
 }
 
