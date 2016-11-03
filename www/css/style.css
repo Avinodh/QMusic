@@ -17,6 +17,19 @@ html, body, *{
     background-attachment: fixed;
 }
 
+#search-intro {
+    width:100%;
+    height:50%;
+    background: linear-gradient(
+      rgba(255, 0, 0, 0.45),
+      rgba(0, 0, 255, 0.3)
+    ),
+    url("../img/landing_background.jpg");
+    background-size: 100% 100%;
+    position:relative;
+    background-attachment: fixed;
+}
+
 #about {
     padding:40px;
 }
@@ -83,4 +96,76 @@ html, body, *{
     transition: all .25s ease-in-out;
    -moz-transition: all .25s ease-in-out;
    -webkit-transition: all .25s ease-in-out;
+}
+
+.track-table{
+    width:95%;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:50px;
+}
+
+.track-record{
+    cursor:pointer;
+    border-bottom:1px solid lightgray;
+    transition: all .20s ease-in-out;
+   -moz-transition: all .20s ease-in-out;
+   -webkit-transition: all .20s ease-in-out;
+    height:50px;
+}
+.track-record:hover{
+    background-color: rgba(125,65,129,0.1);
+}
+.id{
+    width:5%;
+    border-right:1px solid lightgray;
+    text-align:center;
+    display:none;
+}
+
+.name{
+    padding-left:10px;
+    width:45%;
+}
+
+.artist{
+    padding-left:10px;
+    width:45%;
+}
+
+.add-track{
+    width:3%;
+    padding-left:10px;
+    padding-right:10px;
+    border-left:1px solid lightgray;
+    cursor: pointer;
+    font-size: 30px;
+}
+
+#search-song{
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid #89C4F4;
+  box-sizing: border-box;
+  outline: none;
+  padding: 0.6em 0.6em;
+  height:50px;
+  width: 300px;
+  transition: all .20s ease-in-out;
+   -moz-transition: all .20s ease-in-out;
+   -webkit-transition: all .20s ease-in-out;
+}
+
+#search-song:focus{
+  border-bottom: 2.2px solid #3A539B;
+}
+
+.search-results{
+    text-align:center;
+}
+
+.search-btn {
+    border-radius:12px;
+    font-weight: normal;
 }

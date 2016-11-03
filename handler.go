@@ -3,20 +3,20 @@ package main
 /************** Functions that handle all routes/ Defines our API *************/
 
 import (
-	"fmt"
-	_"github.com/gorilla/mux"
 	"bytes"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/gob"
 	"encoding/json"
+	"fmt"
+	_ "github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"github.com/zmb3/spotify"
 	"io/ioutil"
 	"net/http"
+	_ "net/url"
 	"os"
 	"strings"
-	_"net/url"
 )
 
 var (
@@ -65,7 +65,7 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 
 	authTokenUrl := fmt.Sprintf("https://accounts.spotify.com/api/token")
-	
+
 	// POST request to fetch Access Token
 	params := fmt.Sprintf("grant_type=authorization_code&code=%s&redirect_uri=%s&client_id=%s&client_secret=%s", code, redirectURL, os.Getenv("SPOTIFY_ID"), os.Getenv("SPOTIFY_SECRET"))
 	reader := strings.NewReader(params)
@@ -82,16 +82,39 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 
 	session.Values["spotify_access_token"] = &Spotify_Auth_Object.AccessToken
 
-    body, _ := ioutil.ReadFile("www/dashboard.html")
-    fmt.Fprint(rw, string(body))
+	body, _ := ioutil.ReadFile("www/dashboard.html")
+	fmt.Fprint(rw, string(body))
 }
 
 func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
-    r.ParseForm()
-    var pc *Party_Controller = TheMasterController.AddPartyController(r.Form["secret-code"][0])
-    pc.CreateParty(r)
-    fmt.Fprint(rw, "Created new controller ", r.Form)
+	r.ParseForm()
+	var pc *Party_Controller = TheMasterController.AddPartyController(r.Form["secret-code"][0])
+	pc.CreateParty(r)
+	fmt.Fprint(rw, "Created new controller ", r.Form)
 }
+
+func SearchSong(rw http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	var query = r.FormValue("searchsong")
+
+	getTrackUrl := fmt.Sprintf("https://api.spotify.com/v1/search?q=%s&type=track", query)
+
+	httpClient := &http.Client{}
+	req, _ := http.NewRequest("GET", getTrackUrl, nil)
+	res, _ := httpClient.Do(req)
+	resBody, _ := ioutil.ReadAll(res.Body)
+
+	//var songList SongList
+	var result SearchResult
+	err := json.Unmarshal([]byte(resBody), &result)
+	if err != nil {
+		panic(err)
+	}
+
+	jsonResult, _ := json.Marshal(result.Tracks.Items)
+	fmt.Fprint(rw, string(jsonResult))
+}
+
 /************** BEGIN SECTION: HELPER FUNCTIONS *************/
 
 // GenerateRandomBytes returns securely generated random bytes.
@@ -132,14 +155,14 @@ func GetBytes(key interface{}) ([]byte, error) {
 /************** END SECTION: HELPER FUNCTIONS *************/
 
 /*Fetch Playlists API endpoint */
-	/*httpClient := &http.Client{}
+/*httpClient := &http.Client{}
 
-	  getPlaylistsUrl := fmt.Sprint("https://api.spotify.com/v1/users/12124324757/playlists")
-	  authHeader := fmt.Sprintf("Bearer %s", "BQCdp2D2ocHOyYPdP-1CDlaAsH6uKn3TMhoCPpJFpwWPufArd_01VBjXWoevKmuqqoala4yrFbWAW15VbGM4uA0yHhzmTf0_IJVz-VA5iVO-cKxwF4sHGr23osmxGg7_E9MBCPUwQbmEmNrDeDwBnrWO_nd8p3tz")
+  getPlaylistsUrl := fmt.Sprint("https://api.spotify.com/v1/users/12124324757/playlists")
+  authHeader := fmt.Sprintf("Bearer %s", "BQCdp2D2ocHOyYPdP-1CDlaAsH6uKn3TMhoCPpJFpwWPufArd_01VBjXWoevKmuqqoala4yrFbWAW15VbGM4uA0yHhzmTf0_IJVz-VA5iVO-cKxwF4sHGr23osmxGg7_E9MBCPUwQbmEmNrDeDwBnrWO_nd8p3tz")
 
-	  req, _ := http.NewRequest("GET", getPlaylistsUrl, nil)
-	  req.Header.Set("Authorization", authHeader)
-	  res, _ := httpClient.Do(req)
-	  resBody, _ := ioutil.ReadAll(res.Body)
+  req, _ := http.NewRequest("GET", getPlaylistsUrl, nil)
+  req.Header.Set("Authorization", authHeader)
+  res, _ := httpClient.Do(req)
+  resBody, _ := ioutil.ReadAll(res.Body)
 
-	  fmt.Fprint(rw, string(resBody))*/
+  fmt.Fprint(rw, string(resBody))*/

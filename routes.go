@@ -26,9 +26,9 @@ var routes = Routes{
 	Route{
 		"CreatePartyController",
 		"POST",
-		"/dashboard",
+		"/dashboard/createparty",
 		CreatePartyController,
-		},
+	},
 	Route{
 		"AuthorizeSpotify",
 		"GET",
@@ -41,6 +41,13 @@ var routes = Routes{
 		"GET",
 		"/dashboard",
 		Dashboard,
+	},
+
+	Route{
+		"SearchSong",
+		"GET",
+		"/searchsong",
+		SearchSong,
 	},
 }
 
