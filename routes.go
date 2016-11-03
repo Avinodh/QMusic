@@ -26,7 +26,7 @@ var routes = Routes{
 	Route{
 		"CreatePartyController",
 		"POST",
-		"/createplaylist",
+		"/dashboard",
 		CreatePartyController,
 		},
 	Route{
