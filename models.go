@@ -10,6 +10,14 @@ type Spotify_User struct {
 	ProfilePic  string `json:"images"`
 }
 
+type Song struct {
+  SongName string
+  Artist string
+  Album string
+  Artwork string
+  SongURI string
+}
+
 type Party struct {
 	IsActive bool
 	PartyHost string
@@ -24,6 +32,8 @@ type Party_Controller struct {
 	Active *Party
 	AuthToken string
 	RefreshToken string
+  PartyHostUserId string
+  PlaylistId string
 }
 
 type Master_Controller struct {
