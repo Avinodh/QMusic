@@ -82,6 +82,24 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 
 	session.Values["spotify_access_token"] = &Spotify_Auth_Object.AccessToken
 
+	/******* Fetch user's Spotify ID *********/
+	authHeader := fmt.Sprintf("Bearer %s", Spotify_Auth_Object.AccessToken)
+	getTrackUrl := fmt.Sprintf("https://api.spotify.com/v1/me")
+
+	httpClient := &http.Client{}
+	req, _ = http.NewRequest("GET", getTrackUrl, nil)
+	req.Header.Set("Authorization", authHeader)
+
+	res, _ := httpClient.Do(req)
+	resBody, _ := ioutil.ReadAll(res.Body)
+
+	// Spotify_User_Object now contains User ID, Display Name, and Profile Picture URL
+	err = json.Unmarshal([]byte(resBody), &Spotify_User_Object)
+	if err != nil {
+		panic(err)
+	}
+	/******************************************/
+
 	body, _ := ioutil.ReadFile("www/dashboard.html")
 	fmt.Fprint(rw, string(body))
 }

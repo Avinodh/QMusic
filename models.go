@@ -5,9 +5,13 @@ import (
 )
 
 type Spotify_User struct {
-	Id          string `json:"uid,Number"`
-	DisplayName string `json:"displayName,Number"`
-	ProfilePic  string `json:"images"`
+	Id          string `json:"id"`
+	DisplayName string `json:"display_name"`
+	ProfilePic  []Image `json:"images"`
+}
+
+type Image struct {
+	Url string `json:"url"`
 }
 
 type Spotify_Auth struct {
@@ -83,5 +87,4 @@ func InitializeController() *Master_Controller {
 
 var TheMasterController = InitializeController()
 var Spotify_Auth_Object Spotify_Auth
-
-//type SongList []Song
+var Spotify_User_Object Spotify_User
