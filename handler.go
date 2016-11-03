@@ -94,6 +94,13 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
     // the client can now be used to make authenticated requests
 }
 
+func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
+    r.ParseForm()
+    var pc *Party_Controller = TheMasterController.AddPartyController(r.Form["secret-code"][0])
+    pc.CreateParty(r)
+    fmt.Fprint(rw, "Created new controller ", r.Form)
+
+}
 /************** BEGIN SECTION: HELPER FUNCTIONS *************/
 
 // GenerateRandomBytes returns securely generated random bytes.
