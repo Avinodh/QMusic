@@ -71,6 +71,7 @@ func (pc *Party_Controller) CreateParty(r *http.Request) bool {
 	pc.Active = new_party
 	pc.AuthToken = Spotify_Auth_Object.AccessToken
 	pc.RefreshToken = Spotify_Auth_Object.RefreshToken
+	pc.PartyHostUserId = Spotify_User_Object.Id;
 	return true
 }
 
