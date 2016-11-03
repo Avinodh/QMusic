@@ -169,3 +169,7 @@ html, body, *{
     border-radius:12px;
     font-weight: normal;
 }
+
+.track-column-header {
+    padding-left: 10px;
+}
