@@ -16,6 +16,13 @@ type Spotify_Auth struct {
 	ExpiresIn    int   `json:"expires_in"`
     RefreshToken string `json:"refresh_token"`
 	Scope string `json:"scope"`
+
+type Song struct {
+  SongName string
+  Artist string
+  Album string
+  Artwork string
+  SongURI string
 }
 
 type Party struct {
@@ -31,6 +38,8 @@ type Party_Controller struct {
 	Active *Party
 	AuthToken string
 	RefreshToken string
+  PartyHostUserId string
+  PlaylistId string
 }
 
 type Master_Controller struct {
