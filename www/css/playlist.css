@@ -1,0 +1,59 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  
+  padding-bottom: 20px;
+}
+
+.jumbotron{
+	width:85%;
+	float: right;
+	margin-left: 14.4%;
+	background-color: #232323;
+    border-left: thick solid #512f54;
+}
+
+.container{
+	background-color: #232323;
+	margin-left: 14.4%;
+    border-left: thick solid #512f56;
+	width:85%;
+	float: right;
+	margin-top: -2.7%;
+}
+
+p{
+	color: white;
+}
+
+h3{
+color: white;	
+}
+
+.stockphoto{
+	color: white;
+}
+
+.left-side-bar{
+	float: left;
+	background-color: #232323;
+	color: white;
+	width: 15%;
+}
+
+.FixedHeightContainer
+{ border-radius: 10px;
+  margin-top: 60px;
+  margin-left: 20%;
+  height: 30%;
+  width:60%;
+  padding:3px; 
+  background:#202122
+}
+.Content
+{
+ background:#202122;
+ border-radius: 13px;	 
+  height:224px;
+   overflow:auto;
+    
+}
