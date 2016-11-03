@@ -10,9 +10,9 @@ function authSpotify() {
 }
 
 function showCreatePartyModule() {
-  $("body").load("overlay.html",function(){
+  $("#popup").load("overlay.html",function(){
     $(this).clone().appendTo("body").remove();
-    $('#createPartyForm').submit(function () {
+    $('#createPartyButton').on(function () {
       createParty();
     });
   });
@@ -30,4 +30,11 @@ function createParty() {
       values[this.name] = $(this).val();
   });
   console.log(values);
+}
+
+function closeOverlay() {
+  var myNode = document.getElementById("popup");
+  while (myNode.firstChild) {
+      myNode.removeChild(myNode.firstChild);
+  }
 }

@@ -1,47 +1,44 @@
 <html>
-    <head>
-        <title>
+<head>
+  <title>
 
-        </title>
-        <link href='https://fonts.googleapis.com/css?family=Josefin+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  </title>
+  <link href='https://fonts.googleapis.com/css?family=Josefin+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
-        <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
 
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
 
-        <link href="css/style.css" rel="stylesheet" type="text/css"/>
-        <script src="js/app.js"></script>
-    </head>
+  <link href="css/style.css" rel="stylesheet" type="text/css"/>
+  <link href="css/overlay.css" rel="stylesheet" type="text/css"/>
+  <script src="js/app.js"></script>
+</head>
 
-    <body>
-        <section id="intro">
-            <div class="navbar">
-                <h6 class="menu-options">Contact</h6>
-                <h6 class="menu-options">About</h6>
-            </div>
+<body>
+  <div id="popup"></div>
+  <section id="intro">
+    <div class="navbar">
+      <h6 class="menu-options">Contact</h6>
+      <h6 class="menu-options">About</h6>
+    </div>
+    <div class="header">
+      <h1 class="header-title"> QMusic </h1>
+      <h1 class="header-subtitle"> Queue the music. Share the hype.</h1>
 
-            <div class="header">
-                <h1 class="header-title"> QMusic </h1>
-                <h1 class="header-subtitle"> Queue the music. Share the hype.</h1>
+      <div id="spotify-login-box"></div>
 
-                <div id="spotify-login-box"></div>
+      <button id="login-button" type="button" class="btn btn-primary action-btn" onclick="showCreatePartyModule()">Create party</button>
+    </div>
+  </section>
 
-                <button id="login-button" type="button" class="btn btn-primary action-btn" onclick="showCreatePartyModule()">Create party</button>
-            </div>
-        </section>
+  <section id="about">
+    <div class="content-holder">
+      <h1> Who am I and what is this? I'm 12 btw </h1>
+      <p>QMusic makes managing music at events seamless and interactive by integrating with your Spotify playlist and allows users to provide real-time feedback and queue new songs by texting from their own devices.</p>
+      </div>
+    </section>
 
-        <section id="about">
-            <div class="content-holder">
-                <h1> What is ? </h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi rhoncus metus risus. Praesent diam lectus, blandit vitae nulla in, gravida efficitur ex. Nulla ac neque justo. Fusce sit amet pulvinar metus. Ut odio velit, dignissim ac arcu ac, blandit pharetra massa. Praesent velit elit, convallis in fringilla sit amet, fringilla nec elit. Aliquam rutrum elit nec quam interdum dignissim. Nullam feugiat sed sem sed eleifend. Etiam blandit sapien quam, eget tempor sem pulvinar quis. Nulla ultricies arcu ante, eu sollicitudin mi porttitor ac. Maecenas magna lacus, mollis a condimentum quis, accumsan nec tellus. Vestibulum vel ex in augue varius aliquam. Donec neque erat, pretium sed ultrices non, lobortis et felis. Pellentesque volutpat lectus et aliquet laoreet.
-
-Sed quis auctor nunc. Nulla a volutpat justo, in gravida purus. Pellentesque condimentum erat a dictum convallis. Etiam iaculis eu lorem a mollis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc nec lorem et erat tincidunt sollicitudin quis nec leo. Phasellus diam urna, suscipit vitae aliquam nec, consequat non massa. Ut at posuere nulla. Nunc rhoncus varius nunc, in tempus orci semper at. Sed ac velit in nunc ultricies ultricies. Mauris eget suscipit turpis, nec scelerisque nibh.
-
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin eget ipsum a magna tincidunt luctus. Vivamus vulputate turpis in nunc vehicula, ac dignissim quam hendrerit. Integer a neque ligula. Maecenas egestas blandit ante, ac egestas est congue vel. Cras leo eros, pulvinar at fermentum ac, dapibus in lorem. Nulla id feugiat ex. </p>
-            </div>
-        </section>
-
-    </body>
-</html>
+  </body>
+  </html>
