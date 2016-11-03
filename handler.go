@@ -65,12 +65,11 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 
 	authTokenUrl := fmt.Sprintf("https://accounts.spotify.com/api/token")
-
 	
 	// POST request to fetch Access Token
 	params := fmt.Sprintf("grant_type=authorization_code&code=%s&redirect_uri=%s&client_id=%s&client_secret=%s", code, redirectURL, os.Getenv("SPOTIFY_ID"), os.Getenv("SPOTIFY_SECRET"))
-	body := strings.NewReader(params)
-	req, err := http.NewRequest("POST", authTokenUrl, body)
+	reader := strings.NewReader(params)
+	req, err := http.NewRequest("POST", authTokenUrl, reader)
 	if err != nil {
 		// handle err
 	}
@@ -83,11 +82,16 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 
 	session.Values["spotify_access_token"] = &Spotify_Auth_Object.AccessToken
 
-	// Spotify_Auth_Object.AccessToken now contains the access token required for all API calls
-	fmt.Fprint(rw, Spotify_Auth_Object.AccessToken)
-	// the client can now be used to make authenticated requests
+    body, _ := ioutil.ReadFile("www/dashboard.html")
+    fmt.Fprint(rw, string(body))
 }
 
+func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
+    r.ParseForm()
+    var pc *Party_Controller = TheMasterController.AddPartyController(r.Form["secret-code"][0])
+    pc.CreateParty(r)
+    fmt.Fprint(rw, "Created new controller ", r.Form)
+}
 /************** BEGIN SECTION: HELPER FUNCTIONS *************/
 
 // GenerateRandomBytes returns securely generated random bytes.
