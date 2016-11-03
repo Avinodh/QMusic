@@ -5,21 +5,23 @@ body {
 }
 
 .jumbotron{
-	width:85%;
-	float: right;
-	margin-left: 14.4%;
+	display: inline-block;
+	/*width:85%;*/
+	float:left;
+	width: 85%;
 	background-color: #232323;
-    border-left: thick solid #512f54;
+    border-right: thick solid #512f54;
 }
 
-.container{
+/*.container{
+	display: inline-block;
 	background-color: #232323;
 	margin-left: 14.4%;
     border-left: thick solid #512f56;
 	width:85%;
-	float: right;
+	float: left;
 	margin-top: -2.7%;
-}
+}*/
 
 p{
 	color: white;
@@ -34,8 +36,10 @@ color: white;
 }
 
 .left-side-bar{
+	display: inline-block;
 	float: left;
-	background-color: #232323;
+	background:#202122;
+	height: 100%;
 	color: white;
 	width: 15%;
 }
@@ -56,4 +60,34 @@ color: white;
   height:224px;
    overflow:auto;
     
+}
+
+.FixedHeightContainer-right
+{ border-radius: 4px;
+  margin-top: 60px;
+  margin-left: 20%;
+  height: 30%;
+  width:60%;
+  padding:3px; 
+  background:#512f54;
+}
+
+.random{
+	margin-left: 20px;
+}
+
+#username{
+	font-size: 20px;
+	margin-top: 13px;
+	margin-left: 77px;
+}
+.img-circle {
+    margin-left: 65px;
+    margin-top: 65px;
+    border-radius: 50%;
+}
+.img-circle-a {
+    margin-left: 85px;
+    margin-top: 65px;
+    border-radius: 50%;
 }
