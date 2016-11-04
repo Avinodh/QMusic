@@ -10,14 +10,6 @@ function authSpotify() {
   });
 }
 
-function openSearch() {
-  window.location = "search.html";
-}
-
-function openDashboard() {
-  window.location = "dashboard.html";
-}
-
 function showCreatePartyModule() {
   $("#popup").load("overlay.html",function(){
     $(this).clone().appendTo("body").remove();
