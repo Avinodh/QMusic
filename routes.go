@@ -45,6 +45,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"RenderSearch",
+		"GET",
+		"/search",
+		RenderSearch,
+	},
+
+	Route{
 		"SearchSong",
 		"GET",
 		"/searchsong",

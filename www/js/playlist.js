@@ -34,7 +34,11 @@ $(document).ready(function() {
       e.preventDefault();
       $("#song-list").html('');
       var track_id = this.model.get('id');
-      alert("Added Track Id: " + track_id + " to playlist!");
+      $.post("/addsong", {trackId:track_id}).done(function(data){
+      //$(this.$el).css("background-color","green");
+        alert(data);
+      // console.log(data);
+  });
     },
     render: function() {
       this.$el.html(this.template(this.model.toJSON()));

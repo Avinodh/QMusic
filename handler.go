@@ -104,6 +104,11 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(rw, string(body))
 }
 
+func RenderSearch(rw http.ResponseWriter, r *http.Request) {
+	body, _ := ioutil.ReadFile("www/search.html")
+	fmt.Fprint(rw, string(body))
+}
+
 func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	playlistName := r.FormValue("user") // Actually the party/playlist name
@@ -136,7 +141,10 @@ func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
 
 	pc = TheMasterController.AddPartyController(r.Form["secret-code"][0])
 	pc.CreateParty(r, playlist.Id)
-	fmt.Fprint(rw, playlist.Id)
+	
+	/*body, _ := ioutil.ReadFile("www/search.html")
+	fmt.Fprint(rw, string(body))*/
+	 http.Redirect(rw, r, "/search", http.StatusSeeOther)
 }
 
 func SearchSong(rw http.ResponseWriter, r *http.Request) {
@@ -162,9 +170,12 @@ func SearchSong(rw http.ResponseWriter, r *http.Request) {
 }
 
 func AddSongToPlaylist(rw http.ResponseWriter, r *http.Request) {
+	if pc.PlaylistId == "" {
+		fmt.Fprint(rw, "No Playlist created.")
+		return
+	}
 	r.ParseForm()
 	var trackId = r.FormValue("trackId")
-
 	// POST request to add track to playlist
 	httpClient := &http.Client{}
 	authHeader := fmt.Sprintf("Bearer %s", Spotify_Auth_Object.AccessToken)
