@@ -50,6 +50,13 @@ var routes = Routes{
 		"/searchsong",
 		SearchSong,
 	},
+
+	Route{
+		"ViewPlaylist",
+		"GET",
+		"/viewplaylist",
+		ViewPlaylist,
+	},
 }
 
 func NewRouter() *mux.Router {

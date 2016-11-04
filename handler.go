@@ -111,6 +111,7 @@ func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(rw, "Created new controller ", r.Form)
 }
 
+
 func SearchSong(rw http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	var query = r.FormValue("searchsong")
@@ -141,7 +142,7 @@ func ViewPlaylist(rw http.ResponseWriter, r *http.Request) {
     getTrackUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists/%s",pc.PartyHostUserId, pc.PlaylistId)
     httpClient := &http.Client{}
     req, _ := http.NewRequest("GET", getTrackUrl, nil)
-    req.Header.Set("name", "value")
+    req.Header.Set("Authorization", pc.AuthToken)
     res, _ := httpClient.Do(req)
     fmt.Fprint(rw, "Created new controller ", res.Body)
 }
