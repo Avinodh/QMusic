@@ -5,3 +5,7 @@ function openSearch() {
 function openDashboard() {
   window.location = "dashboard.html";
 }
+
+function openPlaylist() {
+  window.location = "viewplaylist";
+}
