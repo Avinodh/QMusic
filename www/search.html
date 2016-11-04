@@ -17,18 +17,19 @@
   <link href="css/style.css" rel="stylesheet" type="text/css"/>
   <link href="css/overlay.css" rel="stylesheet" type="text/css"/>
   <script src="js/playlist.js"></script>
+  <script src="js/router.js"></script>
 </head>
 
 <body>
   <div id="popup"></div>
   <section id="search-intro">
     <div class="navbar">
-      <h6 class="menu-options">Contact</h6>
-      <h6 class="menu-options">About</h6>
+      <h6 class="menu-options" onclick="openSearch()">Search</h6>
+      <h6 class="menu-options" onclick="openDashboard()">Dashboard</h6>
     </div>
     <div class="header">
-      <h1 class="header-title"> Track Search </h1>
-      <h1 class="header-subtitle"> Search and add tracks to your party playlist.</h1>
+      <h1 class="header-title">Track Search</h1>
+      <h1 class="header-subtitle">Search and add tracks to your party playlist.</h1>
 
       <div id="spotify-login-box"></div>
     </div>
@@ -46,8 +47,7 @@
 
     <!-- BACKBONE.JS TEMPLATES FOR VARIOUS VIEWS -->
       <script type="text/template" class="track-list-template">
-      <tr class="track-record">
-        <td class="id">  
+        <td class="id">
           <div class="track-id"> <%= id %></div>
         </td>
         <td class="name">
@@ -60,7 +60,6 @@
             <span> + </span>
           </a>
         </td>
-      </tr>
     </script>
 
   </body>
