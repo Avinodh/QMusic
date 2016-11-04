@@ -29,6 +29,7 @@ var routes = Routes{
 		"/dashboard/createparty",
 		CreatePartyController,
 	},
+
 	Route{
 		"AuthorizeSpotify",
 		"GET",

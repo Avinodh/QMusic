@@ -30,6 +30,19 @@ html, body, *{
     background-attachment: fixed;
 }
 
+#dashboard-intro {
+    width: 100%;
+    height: 80%;
+    background: linear-gradient(
+        rgba(19, 196, 214, 0.51),
+        rgba(91, 186, 222, 0.18)
+    ),
+    url(../img/rave.jpg);
+    background-size: 100% 100%;
+    position:relative;
+    background-attachment: fixed;
+}
+
 #about {
     padding:40px;
 }
@@ -168,4 +181,8 @@ html, body, *{
 .search-btn {
     border-radius:12px;
     font-weight: normal;
+}
+
+.track-column-header {
+    padding-left: 10px;
 }
