@@ -4,9 +4,18 @@ $(document).ready(function($) {
 
 function authSpotify() {
   $.get("/authspotify").done(function(data){
+      alert(data);
       window.location = data;
-      //console.log(data);
+      // console.log(data);
   });
+}
+
+function openSearch() {
+  window.location = "search.html";
+}
+
+function openDashboard() {
+  window.location = "dashboard.html";
 }
 
 function showCreatePartyModule() {
@@ -16,7 +25,6 @@ function showCreatePartyModule() {
       createParty();
     });
   });
-
 }
 
 function createParty() {
