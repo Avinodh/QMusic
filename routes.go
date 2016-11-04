@@ -26,7 +26,7 @@ var routes = Routes{
 	Route{
 		"CreatePartyController",
 		"POST",
-		"/dashboard/createparty",
+		"/createparty",
 		CreatePartyController,
 	},
 	Route{
@@ -48,6 +48,13 @@ var routes = Routes{
 		"GET",
 		"/searchsong",
 		SearchSong,
+	},
+
+	Route{
+		"AddSongToPlaylist",
+		"POST",
+		"/addsong",
+		AddSongToPlaylist,
 	},
 }
 

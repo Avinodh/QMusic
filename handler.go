@@ -14,7 +14,7 @@ import (
 	"github.com/zmb3/spotify"
 	"io/ioutil"
 	"net/http"
-	_ "net/url"
+	_"net/url"
 	"os"
 	"strings"
 )
@@ -22,7 +22,7 @@ import (
 var (
 	store       = sessions.NewCookieStore([]byte(os.Getenv("COOKIE_STORE_AUTHENTICATION_KEY")), []byte(os.Getenv("COOKIE_STORE_ENCRYPTION_KEY")))
 	redirectURL = os.Getenv("REDIRECT_URL")
-	auth        = spotify.NewAuthenticator(redirectURL, spotify.ScopeUserReadPrivate)
+	auth        = spotify.NewAuthenticator(redirectURL, spotify.ScopeUserReadPrivate, spotify.ScopePlaylistModifyPublic)
 )
 
 func init() {
@@ -106,9 +106,37 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 
 func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	var pc *Party_Controller = TheMasterController.AddPartyController(r.Form["secret-code"][0])
-	pc.CreateParty(r)
-	fmt.Fprint(rw, "Created new controller ", r.Form)
+	playlistName := r.FormValue("user") // Actually the party/playlist name
+
+	/********* Create a new Spotify Playlist ********/
+	authHeader := fmt.Sprintf("Bearer %s", Spotify_Auth_Object.AccessToken)
+	/*data := url.Values{}
+	data.Set("name", playlistName)*/
+	httpClient := &http.Client{}
+
+	createPlaylistUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists",Spotify_User_Object.Id)
+	params := fmt.Sprintf("{\"name\":\"%s\"}", playlistName)
+	reader := strings.NewReader(params)
+
+	req, _ := http.NewRequest("POST", createPlaylistUrl, reader)
+	req.Header.Set("Authorization", authHeader)
+	req.Header.Set("Content-Type", "application/json")
+	res, _ := httpClient.Do(req)
+	resBody, _ := ioutil.ReadAll(res.Body)
+
+	/***** Fetch newly created Playlist details *****/
+
+	var playlist Playlist
+	err := json.Unmarshal([]byte(resBody), &playlist)
+	if err != nil {
+		panic(err)
+	}
+
+	/************************************************/
+
+	pc = TheMasterController.AddPartyController(r.Form["secret-code"][0])
+	pc.CreateParty(r, playlist.Id)
+	fmt.Fprint(rw, playlist.Id)
 }
 
 func SearchSong(rw http.ResponseWriter, r *http.Request) {
@@ -131,6 +159,23 @@ func SearchSong(rw http.ResponseWriter, r *http.Request) {
 
 	jsonResult, _ := json.Marshal(result.Tracks.Items)
 	fmt.Fprint(rw, string(jsonResult))
+}
+
+func AddSongToPlaylist(rw http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	var trackId = r.FormValue("trackId")
+
+	// POST request to add track to playlist
+	httpClient := &http.Client{}
+	authHeader := fmt.Sprintf("Bearer %s", Spotify_Auth_Object.AccessToken)
+	addtoPlaylistUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists/%s/tracks?uris=spotify:track:%s",pc.PartyHostUserId, pc.PlaylistId, trackId)
+	req, _ := http.NewRequest("POST", addtoPlaylistUrl, nil)
+	req.Header.Set("Authorization", authHeader)
+	_, err := httpClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Fprint(rw, "Successfully added track to playlist.")
 }
 
 /************** BEGIN SECTION: HELPER FUNCTIONS *************/

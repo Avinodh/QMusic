@@ -36,6 +36,11 @@ type Track struct {
 	Artists  []Artist`json:"artists"`
 }
 
+type Playlist struct {
+	Id string `json:"id"`
+	Name string `json:"name"`
+}
+
 type Artist struct {
 	AristName string `json:"name"`
 }
@@ -61,7 +66,7 @@ type Master_Controller struct {
 	PartyControllers map[string]*Party_Controller
 }
 
-func (pc *Party_Controller) CreateParty(r *http.Request) bool {
+func (pc *Party_Controller) CreateParty(r *http.Request, playlistId string) bool {
 	var new_party *Party = new(Party)
 	new_party.IsActive = true
 	new_party.PartyHost = r.Form["user"][0]
@@ -71,7 +76,8 @@ func (pc *Party_Controller) CreateParty(r *http.Request) bool {
 	pc.Active = new_party
 	pc.AuthToken = Spotify_Auth_Object.AccessToken
 	pc.RefreshToken = Spotify_Auth_Object.RefreshToken
-	pc.PartyHostUserId = Spotify_User_Object.Id;
+	pc.PartyHostUserId = Spotify_User_Object.Id
+	pc.PlaylistId = playlistId
 	return true
 }
 
@@ -81,7 +87,7 @@ func (mc *Master_Controller) AddPartyController(id string) *Party_Controller {
 }
 
 func InitializeController() *Master_Controller {
-	var mc *Master_Controller = new(Master_Controller)
+	mc = new(Master_Controller)
 	mc.PartyControllers = make(map[string]*Party_Controller)
 	return mc
 }
@@ -89,3 +95,5 @@ func InitializeController() *Master_Controller {
 var TheMasterController = InitializeController()
 var Spotify_Auth_Object Spotify_Auth
 var Spotify_User_Object Spotify_User
+var mc *Master_Controller
+var pc *Party_Controller
