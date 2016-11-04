@@ -22,7 +22,8 @@ $(document).ready(function() {
   // View for one Track Item row
   var TrackItemView = Backbone.View.extend({
     model: new TrackItem(),
-    tagName: 'span',
+    tagName: 'tr',
+    className: 'track-record',
     events: {
       "click td.add-track": "addTrack"
     },
@@ -60,7 +61,7 @@ $(document).ready(function() {
     render: function() {
       var self = this;
       this.$el.html('');
-      this.$el.append('<tr><th>Track Name</th><th>Artist</th></tr>');
+      this.$el.append('<tr><th class="track-column-header">Track Name</th><th class="track-column-header">Artist</th></tr>');
       var count = 1;
       if (this.model.toArray().length == 0) {
         self.$el.append("<h5>0 tracks found!</h5>");
