@@ -115,6 +115,18 @@ func SearchSong(rw http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(rw, string(jsonResult))
 }
 
+
+func ViewPlaylist(rw http.ResponseWriter, r *http.Request) {
+    r.ParseForm()
+    var secret_code string = r.FormValue("secret_code")
+    var pc *Party_Controller= TheMasterController.PartyControllers[secret_code]
+    getTrackUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists/%s",pc.PartyHostUserId, pc.PlaylistId)
+    httpClient := &http.Client{}
+    req, _ := http.NewRequest("GET", getTrackUrl, nil)
+    req.Header.Set("name", "value")
+    res, _ := httpClient.Do(req)
+    fmt.Fprint(rw, "Created new controller ", res.Body)
+}
 /************** BEGIN SECTION: HELPER FUNCTIONS *************/
 
 // GenerateRandomBytes returns securely generated random bytes.
