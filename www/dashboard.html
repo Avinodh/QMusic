@@ -19,27 +19,36 @@
 
 <body>
   <div id="popup"></div>
-  <section id="dashboard-intro">
-    <div class="navbar">
+      <div class="navbar">
       <h6 class="menu-options" onclick="openSearch()">Search</h6>
       <h6 class="menu-options" onclick="openDashboard()">Dashboard</h6>
     </div>
-    <div class="header">
-      <h1 class="header-title">QMusic Dashboard</h1>
-      <h1 class="header-subtitle">Begin by creating a party.</h1>
 
-      <div id="spotify-login-box"></div>
-
-      <button id="login-button" type="button" class="btn btn-primary action-btn" onclick="showCreatePartyModule()">Create party</button>
+  <!-- SIDE NAV BAR -->
+  <div class="navbar navbar-inverse navbar-fixed-left">
+      <div id="profile-pic"></div>
+      <ul class="nav navbar-nav nav-options">
+        <li class="nav-options-item nav-active" onclick="viewCreateParty()">Create Party</li>
+        <li class="nav-options-item" onclick="viewManageParties()">Manage Parties</li>
+      </ul>
     </div>
-  </section>
 
-  <section id="about">
-    <div class="content-holder">
-      <h1>Welcome to your dashboard.</h1>
-      <p>QMusic makes managing music at events seamless and interactive by integrating with your Spotify playlist and allows users to provide real-time feedback and queue new songs by texting from their own devices.</p>
+  <!-- CREATE PARTY VIEW -->
+  <div id="create-party-section" class="dashboard-section">
+      <div class="header">
+        <h1 class="header-title">QMusic Dashboard</h1>
+        <h1 class="header-subtitle">Begin by creating a party.</h1>
+        <button id="login-button" type="button" class="btn btn-primary action-btn" onclick="showCreatePartyModule()">Create party</button>
       </div>
-    </section>
+  </div>
 
-  </body>
-  </html>
+  <!-- MANAGE PARTIES VIEW -->
+  <div id="manage-parties-section" class="dashboard-section">
+      <div class="header">
+        <h1> QMusic Dashboard</h1>
+        <h1> Manage Parties</h1>
+      </div>
+  </div>
+
+</body>
+</html>

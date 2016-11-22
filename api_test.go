@@ -1,24 +1,25 @@
 package main
+
 // TODO: separate package for testing
 
 import (
-    "fmt"
-    //"io"
-    "net/http"
-    "net/http/httptest"
-    "strings"
-    "testing"
-    "net/url"
+	"fmt"
+	//"io"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
+	"strings"
+	"testing"
 )
 
 var (
-    server   *httptest.Server
-    //reader   io.Reader
+	server *httptest.Server
+	//reader   io.Reader
 )
 
 func init() {
 	// Create server for testing
-    server = httptest.NewServer(NewRouter())
+	server = httptest.NewServer(NewRouter())
 }
 
 // func TestMain(m *testing.M) {
@@ -54,9 +55,9 @@ func TestCreatePartyController(t *testing.T) {
 
 	form := url.Values{}
 	form.Add("user", "my_user")
-    form.Add("location", "my_location")
-    form.Add("secret-code", "my_code")
-    form.Add("active-time", "my_time")
+	form.Add("location", "my_location")
+	form.Add("secret-code", "my_code")
+	form.Add("active-time", "my_time")
 
 	reader := strings.NewReader(form.Encode())
 
@@ -97,13 +98,3 @@ func TestSearchSong(t *testing.T) {
 		t.Errorf("Success expected: %d", res.StatusCode)
 	}
 }
-
-
-
-
-
-
-
-
-
-

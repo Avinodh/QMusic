@@ -30,17 +30,25 @@ html, body, *{
     background-attachment: fixed;
 }
 
-#dashboard-intro {
-    width: 100%;
-    height: 80%;
+.dashboard-section {
+  width: 100%;
+  height: 100%;
+  float:left;
+}
+
+#create-party-section {
     background: linear-gradient(
         rgba(19, 196, 214, 0.51),
         rgba(91, 186, 222, 0.18)
     ),
     url(../img/rave.jpg);
     background-size: 100% 100%;
-    position:relative;
     background-attachment: fixed;
+}
+
+#manage-parties-section {
+    color:white;
+    background-color: #171717;
 }
 
 #about {
@@ -185,4 +193,61 @@ html, body, *{
 
 .track-column-header {
     padding-left: 10px;
+}
+
+.navbar-fixed-left {
+  width: 18%;
+  min-width: 150px;
+  border-radius: 0;
+  height: 100%;
+  background-color: #282828;
+  float:left;
+  padding:0;
+  z-index:2;
+}
+
+.navbar-fixed-left .navbar-nav > li {
+  float: none;  /* Cancel default li float: left */
+  width: 100%;
+  padding-left:15px;
+  line-height: 3em;
+}
+
+.navbar-fixed-left + .container {
+  padding-left: 160px;
+}
+
+#profile-pic {
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  background-color: #3A539B;
+  border:2px solid white;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:100px;
+}
+
+
+.nav-options{
+    font-family: "Josefin Sans";
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    margin-top:35px;
+}
+
+.nav-options li {
+      transition: all .15s ease-in-out;
+   -moz-transition: all .15s ease-in-out;
+   -webkit-transition: all .15s ease-in-out;
+}
+
+.nav-options li:hover{
+    cursor: pointer;
+    background-color: rgba(255,255,255,0.2);
+}
+
+.nav-active {
+  background-color: rgba(255,255,255,0.2);
 }
