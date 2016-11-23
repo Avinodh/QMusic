@@ -8,6 +8,7 @@ type Spotify_User struct {
 	Id          string  `json:"id"`
 	DisplayName string  `json:"display_name"`
 	ProfilePic  []Image `json:"images"`
+	DisplayPic	string `json:"display_pic"`
 }
 
 type Image struct {

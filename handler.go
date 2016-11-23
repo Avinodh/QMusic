@@ -15,7 +15,7 @@ import (
 	"github.com/gorilla/sessions"
 	_ "github.com/lib/pq"
 	"github.com/zmb3/spotify"
-	_ "html/template"
+	"html/template"
 	"io/ioutil"
 	"net/http"
 	_ "net/url"
@@ -110,10 +110,19 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+
+	Spotify_User_Object.DisplayPic = Spotify_User_Object.ProfilePic[0].Url
 	/******************************************/
 
-	body, _ := ioutil.ReadFile("www/dashboard.html")
-	fmt.Fprint(rw, string(body))
+	/*body, _ := ioutil.ReadFile("www/dashboard.html")
+	fmt.Fprint(rw, string(body))*/
+
+
+	t, err := template.ParseFiles("www/dashboard.html")
+	checkErr(err)
+
+	err = t.Execute(rw, Spotify_User_Object)
+	checkErr(err)
 }
 
 func RenderSearch(rw http.ResponseWriter, r *http.Request) {
