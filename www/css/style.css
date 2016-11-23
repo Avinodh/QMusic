@@ -30,17 +30,26 @@ html, body, *{
     background-attachment: fixed;
 }
 
-#dashboard-intro {
-    width: 100%;
-    height: 80%;
+.dashboard-section {
+  width: 80%;
+  height: 100%;
+  float:right;
+}
+
+#create-party-section {
     background: linear-gradient(
         rgba(19, 196, 214, 0.51),
         rgba(91, 186, 222, 0.18)
     ),
     url(../img/rave.jpg);
     background-size: 100% 100%;
-    position:relative;
     background-attachment: fixed;
+}
+
+#manage-parties-section {
+    color:white;
+    background-color: #171717;
+    display: none;
 }
 
 #about {
@@ -185,4 +194,133 @@ html, body, *{
 
 .track-column-header {
     padding-left: 10px;
+}
+
+.navbar-fixed-left {
+  width: 20%;
+  min-width: 150px;
+  border-radius: 0;
+  height: 100%;
+  background-color: #282828;
+  float:left;
+  padding:0;
+  z-index:2;
+}
+
+.navbar-fixed-left .navbar-nav > li {
+  float: none;  /* Cancel default li float: left */
+  width: 100%;
+  padding-left:15px;
+  line-height: 3em;
+}
+
+.navbar-fixed-left + .container {
+  padding-left: 160px;
+}
+
+#profile-pic {
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  background-color: #3A539B;
+  border:2px solid white;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:100px;
+}
+
+#user-name {
+  border-bottom: 2px solid gray;
+  color: lightgray;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  padding-bottom: 8px;
+  text-align: center;
+  width: 70%;
+}
+
+.nav-options{
+    font-family: "Josefin Sans";
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    margin-top:35px;
+}
+
+.nav-options li {
+      transition: all .15s ease-in-out;
+   -moz-transition: all .15s ease-in-out;
+   -webkit-transition: all .15s ease-in-out;
+}
+
+.nav-options li:hover{
+    cursor: pointer;
+    background-color: rgba(255,255,255,0.2);
+}
+
+.nav-active {
+  background-color: rgba(255,255,255,0.2);
+}
+
+#party-container {
+  padding-top:100px;
+  padding-left:25px;
+}
+
+.party-object {
+  width:220px;
+  height:290px;
+  background-color:black;
+  cursor: pointer;
+  display:inline-block;
+  margin-right:25px;
+  margin-top:20px;
+}
+
+.party-image {
+  background: url("http://az616578.vo.msecnd.net/files/2016/09/04/636086158772705804-464047450_636055251563473394-1556686792_concert%202.jpg");
+  background-position: center;
+  background-size: 100% 100%;
+  width:100%;
+  height:60%;
+}
+
+.party-info {
+  background-color:#282828;
+  width:100%;
+  height:40%;
+  padding:10px;
+  position:relative;
+}
+
+.party-name {
+  font-size:20px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid gray;
+}
+
+.party-location {
+  margin-top:15px;
+  font-size:14px;
+}
+
+.party-time {
+  position: absolute;
+  font-size:12px;
+  color:lightgray;
+  bottom:0;
+  right:10px;
+}
+
+.song-count {
+  position: absolute;
+  font-size:12px;
+  color:lightgray;
+  bottom:0;
+  left:10px;
+}
+
+.playlist-id {
+  display: none;
 }

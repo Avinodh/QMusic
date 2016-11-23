@@ -6,6 +6,7 @@ function openDashboard() {
   window.location = "dashboard.html";
 }
 
-function openPlaylist() {
-  window.location = "viewplaylist";
+function viewCreateParty() {
+    $(".dashboard-section").css("display", "none");
+    $("#create-party-section").css("display", "block");
 }

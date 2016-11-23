@@ -1,4 +1,11 @@
-$(document).ready(function($) {
+$(document).ready(function() {
+  $(".nav-options-item").click(function(){
+      if($(this).hasClass("nav-active")){}
+      else{
+        $(".nav-options-item").removeClass("nav-active");
+        $(this).addClass("nav-active");
+      }
+  });
 
 });
 

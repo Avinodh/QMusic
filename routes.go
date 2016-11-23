@@ -64,6 +64,25 @@ var routes = Routes{
 		"/addsong",
 		AddSongToPlaylist,
 	},
+
+	Route{
+		"ViewPlaylist",
+		"GET",
+		"/viewplaylist",
+		ViewPlaylist,
+	},
+	Route{
+		"RenderPlaylist",
+		"GET",
+		"/playlist",
+		RenderPlaylist,
+	},
+	Route{
+		"GetHostParties",
+		"GET",
+		"/gethostparties",
+		GetHostParties,
+	},
 }
 
 func NewRouter() *mux.Router {

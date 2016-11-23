@@ -5,16 +5,20 @@ package main
 import (
 	"bytes"
 	"crypto/rand"
+	"database/sql"
 	"encoding/base64"
 	"encoding/gob"
 	"encoding/json"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
+	_ "github.com/lib/pq"
 	"github.com/zmb3/spotify"
+	"html/template"
 	"io/ioutil"
 	"net/http"
-	_"net/url"
+	_ "net/url"
 	"os"
 	"strings"
 )
@@ -23,9 +27,17 @@ var (
 	store       = sessions.NewCookieStore([]byte(os.Getenv("COOKIE_STORE_AUTHENTICATION_KEY")), []byte(os.Getenv("COOKIE_STORE_ENCRYPTION_KEY")))
 	redirectURL = os.Getenv("REDIRECT_URL")
 	auth        = spotify.NewAuthenticator(redirectURL, spotify.ScopeUserReadPrivate, spotify.ScopePlaylistModifyPublic)
+	db          *sql.DB
+	dberr       error
 )
 
 func init() {
+	/**************** DATABASE CONNECTION ********************/
+	db, dberr = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	if dberr != nil {
+		panic(dberr)
+	}
+	/**********************************************************/
 	store.Options = &sessions.Options{
 		Path: "/",
 		//MaxAge:   3600 * 8, // 8 hours
@@ -98,10 +110,19 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+
+	Spotify_User_Object.DisplayPic = Spotify_User_Object.ProfilePic[0].Url
 	/******************************************/
 
-	body, _ := ioutil.ReadFile("www/dashboard.html")
-	fmt.Fprint(rw, string(body))
+	/*body, _ := ioutil.ReadFile("www/dashboard.html")
+	fmt.Fprint(rw, string(body))*/
+
+
+	t, err := template.ParseFiles("www/dashboard.html")
+	checkErr(err)
+
+	err = t.Execute(rw, Spotify_User_Object)
+	checkErr(err)
 }
 
 func RenderSearch(rw http.ResponseWriter, r *http.Request) {
@@ -119,7 +140,7 @@ func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
 	data.Set("name", playlistName)*/
 	httpClient := &http.Client{}
 
-	createPlaylistUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists",Spotify_User_Object.Id)
+	createPlaylistUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists", Spotify_User_Object.Id)
 	params := fmt.Sprintf("{\"name\":\"%s\"}", playlistName)
 	reader := strings.NewReader(params)
 
@@ -141,10 +162,10 @@ func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
 
 	pc = TheMasterController.AddPartyController(r.Form["secret-code"][0])
 	pc.CreateParty(r, playlist.Id)
-	
+
 	/*body, _ := ioutil.ReadFile("www/search.html")
 	fmt.Fprint(rw, string(body))*/
-	 http.Redirect(rw, r, "/search", http.StatusSeeOther)
+	http.Redirect(rw, r, "/search", http.StatusSeeOther)
 }
 
 func SearchSong(rw http.ResponseWriter, r *http.Request) {
@@ -179,7 +200,7 @@ func AddSongToPlaylist(rw http.ResponseWriter, r *http.Request) {
 	// POST request to add track to playlist
 	httpClient := &http.Client{}
 	authHeader := fmt.Sprintf("Bearer %s", Spotify_Auth_Object.AccessToken)
-	addtoPlaylistUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists/%s/tracks?uris=spotify:track:%s",pc.PartyHostUserId, pc.PlaylistId, trackId)
+	addtoPlaylistUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists/%s/tracks?uris=spotify:track:%s", pc.PartyHostUserId, pc.PlaylistId, trackId)
 	req, _ := http.NewRequest("POST", addtoPlaylistUrl, nil)
 	req.Header.Set("Authorization", authHeader)
 	_, err := httpClient.Do(req)
@@ -187,6 +208,75 @@ func AddSongToPlaylist(rw http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	fmt.Fprint(rw, "Successfully added track to playlist.")
+}
+
+func GetHostParties(rw http.ResponseWriter, r *http.Request) {
+	var (
+		active_time    string
+		secret_code    string
+		party_name     string
+		party_location string
+		playlist_id    string
+	)
+
+	p, err := db.Prepare("SELECT active_time, secret_code, party_name, party_location, playlist_id from party WHERE host_id=$1")
+	checkErr(err)
+
+	rows, err := p.Query(Spotify_User_Object.Id)
+	checkErr(err)
+
+	var hostParties = HostParties{}
+
+	for rows.Next() {
+		err := rows.Scan(&active_time, &secret_code, &party_name, &party_location, &playlist_id)
+		checkErr(err)
+
+		hostParty := HostParty{ActiveTime: active_time, SecretCode: secret_code, PartyName: party_name, PartyLocation: party_location, PlaylistId: playlist_id}
+		hostParties = append(hostParties, hostParty)
+	}
+
+	err = rows.Err()
+	checkErr(err)
+	defer p.Close()
+	defer rows.Close()
+
+	if err := json.NewEncoder(rw).Encode(hostParties); err != nil {
+		panic(err)
+	}
+}
+
+func ViewPlaylist(rw http.ResponseWriter, r *http.Request) {
+	getTrackUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists/%s/tracks", pc.PartyHostUserId, pc.PlaylistId)
+	httpClient := &http.Client{}
+	authHeader := fmt.Sprintf("Bearer %s", Spotify_Auth_Object.AccessToken)
+	req, _ := http.NewRequest("GET", getTrackUrl, nil)
+
+	req.Header.Set("Authorization", authHeader)
+	res, _ := httpClient.Do(req)
+	resBody, _ := ioutil.ReadAll(res.Body)
+
+	var result ViewTracks
+	err := json.Unmarshal([]byte(resBody), &result)
+	if err != nil {
+		panic(err)
+	}
+
+	/*t, err := template.ParseFiles("www/templates/playlist.html")
+	if err != nil {
+		fmt.Fprint(rw, err)
+		return
+	}
+	t.Execute(rw, result)*/
+	//jsonResult, _ := json.Marshal(result)
+	//fmt.Fprint(rw, string(jsonResult))
+	//fmt.Fprint(rw, result)
+	jsonResult, _ := json.Marshal(result.Items)
+	fmt.Fprint(rw, string(jsonResult))
+}
+
+func RenderPlaylist(rw http.ResponseWriter, r *http.Request) {
+	body, _ := ioutil.ReadFile("www/playlist.html")
+	fmt.Fprint(rw, string(body))
 }
 
 /************** BEGIN SECTION: HELPER FUNCTIONS *************/
@@ -240,3 +330,9 @@ func GetBytes(key interface{}) ([]byte, error) {
   resBody, _ := ioutil.ReadAll(res.Body)
 
   fmt.Fprint(rw, string(resBody))*/
+
+func checkErr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}

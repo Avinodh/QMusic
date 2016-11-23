@@ -5,9 +5,10 @@ import (
 )
 
 type Spotify_User struct {
-	Id          string `json:"id"`
-	DisplayName string `json:"display_name"`
+	Id          string  `json:"id"`
+	DisplayName string  `json:"display_name"`
 	ProfilePic  []Image `json:"images"`
+	DisplayPic	string `json:"display_pic"`
 }
 
 type Image struct {
@@ -31,13 +32,21 @@ type SearchTracks struct {
 }
 
 type Track struct {
-	Id   string `json:"id"`
-	TrackName string `json:"name"`
-	Artists  []Artist`json:"artists"`
+	Id        string   `json:"id"`
+	TrackName string   `json:"name"`
+	Artists   []Artist `json:"artists"`
+}
+
+type ViewTracks struct {
+	Items []ViewTrack `json:"items"`
+}
+
+type ViewTrack struct {
+	TrackItem Track `json:"track"`
 }
 
 type Playlist struct {
-	Id string `json:"id"`
+	Id   string `json:"id"`
 	Name string `json:"name"`
 }
 
@@ -45,17 +54,18 @@ type Artist struct {
 	AristName string `json:"name"`
 }
 
-type Party struct {
-	IsActive     bool
-	PartyHost    string
-	Location     string
-	SecretCode   string
-	ActiveTime   string
-	MyController *Party_Controller
+type HostParty struct {
+	IsActive      bool   `json:"is_active"`
+	ActiveTime    string `json:"active_time"`
+	SecretCode    string `json:"secret_code"`
+	PartyName     string `json:"party_name"`
+	PartyLocation string `json:"party_location"`
+	PlaylistId    string `json:"playlist_id"`
+	MyController  *Party_Controller
 }
 
 type Party_Controller struct {
-	Active          *Party
+	Active          *HostParty
 	AuthToken       string
 	RefreshToken    string
 	PartyHostUserId string
@@ -67,17 +77,32 @@ type Master_Controller struct {
 }
 
 func (pc *Party_Controller) CreateParty(r *http.Request, playlistId string) bool {
-	var new_party *Party = new(Party)
+	var new_party *HostParty = new(HostParty)
 	new_party.IsActive = true
-	new_party.PartyHost = r.Form["user"][0]
-	new_party.Location = r.Form["location"][0]
+	new_party.PartyName = r.Form["user"][0]
+	new_party.PartyLocation = r.Form["location"][0]
 	new_party.SecretCode = r.Form["secret-code"][0]
 	new_party.ActiveTime = r.Form["active-time"][0]
+	new_party.PlaylistId = playlistId
 	pc.Active = new_party
 	pc.AuthToken = Spotify_Auth_Object.AccessToken
 	pc.RefreshToken = Spotify_Auth_Object.RefreshToken
 	pc.PartyHostUserId = Spotify_User_Object.Id
 	pc.PlaylistId = playlistId
+
+	/**** Saving to Database ****/
+	p, _ := db.Prepare("INSERT INTO partycontroller VALUES ($1, $2, $3, $4, $5)")
+	_, e := p.Exec(new_party.SecretCode, pc.AuthToken, pc.RefreshToken, pc.PartyHostUserId, pc.PlaylistId)
+	if e != nil {
+		panic(e)
+	}
+
+	p, _ = db.Prepare("INSERT INTO party VALUES ($1, $2, $3, $4, $5, $6, $7)")
+	_, e = p.Exec(new_party.IsActive, new_party.ActiveTime, new_party.SecretCode, pc.PartyHostUserId, new_party.PartyName, new_party.PartyLocation, pc.PlaylistId)
+	if e != nil {
+		panic(e)
+	}
+	/****************************/
 	return true
 }
 
@@ -97,3 +122,5 @@ var Spotify_Auth_Object Spotify_Auth
 var Spotify_User_Object Spotify_User
 var mc *Master_Controller
 var pc *Party_Controller
+
+type HostParties []HostParty
