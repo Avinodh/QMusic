@@ -1,0 +1,371 @@
+html, body, *{
+    margin:0;
+    padding:0;
+    font-family: "Josefin Sans";
+}
+
+#intro {
+    width:100%;
+    height:80%;
+    background: linear-gradient(
+      rgba(255, 0, 0, 0.45),
+      rgba(0, 0, 255, 0.3)
+    ),
+    url("../img/landing_background.jpg");
+    background-size: 100% 100%;
+    position:relative;
+    background-attachment: fixed;
+}
+
+#search-intro {
+    width:100%;
+    height:50%;
+    background: linear-gradient(
+      rgba(255, 0, 0, 0.45),
+      rgba(0, 0, 255, 0.3)
+    ),
+    url("../img/landing_background.jpg");
+    background-size: 100% 100%;
+    position:relative;
+    background-attachment: fixed;
+}
+
+.dashboard-section {
+  width: 80%;
+  height: 100%;
+  float:right;
+}
+
+#create-party-section {
+    background: linear-gradient(
+        rgba(19, 196, 214, 0.51),
+        rgba(91, 186, 222, 0.18)
+    ),
+    url(../img/rave.jpg);
+    background-size: 100% 100%;
+    background-attachment: fixed;
+}
+
+#manage-parties-section {
+    color:white;
+    background-color: #171717;
+    display: none;
+}
+
+#about {
+    padding:40px;
+}
+.navbar{
+    width:100%;
+    height:80px;
+    background-color: rgba(0,0,0,0.6);
+    position:absolute;
+}
+
+.menu-options{
+    font-family: "Josefin Sans";
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    float:right;
+    margin-top:30px;
+    margin-right:45px;
+    transition: all .25s ease-in-out;
+   -moz-transition: all .25s ease-in-out;
+   -webkit-transition: all .25s ease-in-out;
+}
+
+.header {
+    position: relative;
+    top: 50%;
+    text-align:center;
+    transform: translateY(-50%);
+    -ms-transform:translateY(-50%);
+    -webkit-transform:translateY(-50%);
+}
+
+.menu-options:hover{
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+}
+
+.header-title, .header-subtitle {
+    font-family: "Josefin Sans";
+    color: white;
+    text-align:center;
+    font-weight: bold;
+}
+
+.header-title {
+    margin-bottom:15px;
+    font-size: 85px;
+}
+
+.header-subtitle {
+    font-size: 30px;
+}
+
+#login-button {
+    margin-top:30px;
+}
+
+.action-btn {
+    font-family: "Josefin Sans";
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 20px;
+    border:none;
+    transition: all .25s ease-in-out;
+   -moz-transition: all .25s ease-in-out;
+   -webkit-transition: all .25s ease-in-out;
+}
+
+.track-table{
+    width:95%;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:50px;
+}
+
+.track-record{
+    cursor:pointer;
+    border-bottom:1px solid lightgray;
+    transition: all .20s ease-in-out;
+   -moz-transition: all .20s ease-in-out;
+   -webkit-transition: all .20s ease-in-out;
+    height:50px;
+}
+.track-record:hover{
+    background-color: rgba(125,65,129,0.1);
+}
+.id{
+    width:5%;
+    border-right:1px solid lightgray;
+    text-align:center;
+    display:none;
+}
+
+.name{
+    padding-left:10px;
+    width:45%;
+}
+
+.artist{
+    padding-left:10px;
+    width:45%;
+}
+
+.add-track{
+    width:3%;
+    padding-left:10px;
+    padding-right:10px;
+    border-left:1px solid lightgray;
+    cursor: pointer;
+    font-size: 30px;
+}
+
+#search-song{
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid #89C4F4;
+  box-sizing: border-box;
+  outline: none;
+  padding: 0.6em 0.6em;
+  height:50px;
+  width: 300px;
+  transition: all .20s ease-in-out;
+   -moz-transition: all .20s ease-in-out;
+   -webkit-transition: all .20s ease-in-out;
+}
+
+#search-song:focus{
+  border-bottom: 2.2px solid #3A539B;
+}
+
+.search-results{
+    text-align:center;
+}
+
+.search-btn {
+    border-radius:12px;
+    font-weight: normal;
+}
+
+.track-column-header {
+    padding-left: 10px;
+}
+
+.navbar-fixed-left {
+  width: 20%;
+  min-width: 150px;
+  border-radius: 0;
+  height: 100%;
+  background-color: #282828;
+  float:left;
+  padding:0;
+  z-index:2;
+}
+
+.navbar-fixed-left .navbar-nav > li {
+  float: none;  /* Cancel default li float: left */
+  width: 100%;
+  padding-left:15px;
+  line-height: 3em;
+}
+
+.navbar-fixed-left + .container {
+  padding-left: 160px;
+}
+
+#profile-pic {
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  background-color: #3A539B;
+  border:2px solid white;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:100px;
+}
+
+#user-name {
+  border-bottom: 2px solid gray;
+  color: lightgray;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  padding-bottom: 8px;
+  text-align: center;
+  width: 70%;
+}
+
+.nav-options{
+    font-family: "Josefin Sans";
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    margin-top:35px;
+}
+
+.nav-options li {
+      transition: all .15s ease-in-out;
+   -moz-transition: all .15s ease-in-out;
+   -webkit-transition: all .15s ease-in-out;
+}
+
+.nav-options li:hover{
+    cursor: pointer;
+    background-color: rgba(255,255,255,0.2);
+}
+
+.nav-active {
+  background-color: rgba(255,255,255,0.2);
+}
+
+#party-container {
+  padding-top:100px;
+  padding-left:25px;
+}
+
+.party-object {
+  width:220px;
+  height:290px;
+  background-color:black;
+  cursor: pointer;
+  display:inline-block;
+  margin-right:25px;
+  margin-top:20px;
+}
+
+.party-image {
+  background: url("http://az616578.vo.msecnd.net/files/2016/09/04/636086158772705804-464047450_636055251563473394-1556686792_concert%202.jpg");
+  background-position: center;
+  background-size: 100% 100%;
+  width:100%;
+  height:60%;
+}
+
+.party-info {
+  background-color:#282828;
+  width:100%;
+  height:40%;
+  padding:10px;
+  position:relative;
+}
+
+.party-name {
+  font-size:20px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid gray;
+}
+
+.party-location {
+  margin-top:15px;
+  font-size:14px;
+}
+
+.party-time {
+  position: absolute;
+  font-size:12px;
+  color:lightgray;
+  bottom:0;
+  right:10px;
+}
+
+.song-count {
+  position: absolute;
+  font-size:12px;
+  color:lightgray;
+  bottom:0;
+  left:10px;
+}
+
+.playlist-id {
+  display: none;
+}
+
+
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.popup .popuptext {
+    visibility: hidden;
+    width: 320px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -160px;
+    margin-top: -100px;
+    
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+    
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+}

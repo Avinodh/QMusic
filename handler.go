@@ -133,7 +133,6 @@ func RenderSearch(rw http.ResponseWriter, r *http.Request) {
 func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	playlistName := r.FormValue("user") // Actually the party/playlist name
-
 	/********* Create a new Spotify Playlist ********/
 	authHeader := fmt.Sprintf("Bearer %s", Spotify_Auth_Object.AccessToken)
 	/*data := url.Values{}
@@ -143,7 +142,6 @@ func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
 	createPlaylistUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists", Spotify_User_Object.Id)
 	params := fmt.Sprintf("{\"name\":\"%s\"}", playlistName)
 	reader := strings.NewReader(params)
-
 	req, _ := http.NewRequest("POST", createPlaylistUrl, reader)
 	req.Header.Set("Authorization", authHeader)
 	req.Header.Set("Content-Type", "application/json")
@@ -151,14 +149,14 @@ func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
 	resBody, _ := ioutil.ReadAll(res.Body)
 
 	/***** Fetch newly created Playlist details *****/
-
+ 
 	var playlist Playlist
 	err := json.Unmarshal([]byte(resBody), &playlist)
 	if err != nil {
 		panic(err)
 	}
-
 	/************************************************/
+
 
 	pc = TheMasterController.AddPartyController(r.Form["secret-code"][0])
 	pc.CreateParty(r, playlist.Id)
@@ -244,6 +242,53 @@ func GetHostParties(rw http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 }
+
+func FindParties(rw http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	var query = r.FormValue("usercode")
+
+	var (
+		active_time    string
+		secret_code    string
+		party_name     string
+		party_location string
+		playlist_id    string
+	)
+
+	p, err := db.Prepare("SELECT active_time, secret_code, party_name, party_location, playlist_id from party WHERE secret_code=$1")
+	checkErr(err)
+
+	rows, err := p.Query(query)
+	checkErr(err)
+
+	var hostParties = HostParties{}
+
+	for rows.Next() {
+		err := rows.Scan(&active_time, &secret_code, &party_name, &party_location, &playlist_id)
+		checkErr(err)
+
+		hostParty := HostParty{ActiveTime: active_time, SecretCode: secret_code, PartyName: party_name, PartyLocation: party_location, PlaylistId: playlist_id}
+		hostParties = append(hostParties, hostParty)
+	}
+
+	err = rows.Err()
+	checkErr(err)
+	defer p.Close()
+	defer rows.Close()
+
+	
+	//	if err := json.NewEncoder(rw).Encode(hostParties); err != nil {
+		//	panic(err)
+	//}
+
+	if hostParties[0].SecretCode != query {
+		fmt.Fprint(rw,"Code didn't match")
+	} else {
+		http.Redirect(rw, r, "/search", http.StatusSeeOther)
+	}
+
+}
+
 
 func ViewPlaylist(rw http.ResponseWriter, r *http.Request) {
 	getTrackUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists/%s/tracks", pc.PartyHostUserId, pc.PlaylistId)

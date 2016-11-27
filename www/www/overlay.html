@@ -1,0 +1,22 @@
+<div class="background showBackground modalWhiteout" tabindex="-1" id="background-overlay">
+  <button title="Close" class="modal__closeButton" onclick="closeOverlay()">X</button>
+  <form id="createPartyForm" class="popup" action="/createparty" method="post">
+    <div>
+      <h3>Party Form</h3>
+
+      <label for="usrnm" class="ui-hidden-accessible"></label>
+      <input type="text" name="user" id="usrnm" placeholder="Party Name">
+
+      <label for="location" class="ui-hidden-accessible"></label>
+      <input type="text" name="location" id="location" placeholder="Location">
+
+      <label for="secret-code" class="ui-hidden-accessible"></label>
+      <input type="password" name="secret-code" id="secret-code" placeholder="Secret Code">
+
+      <label for="active-time" class="ui-hidden-accessible"></label>
+      <input type="text" name="active-time" id="active-time" placeholder="Active Time">
+
+      <button id="createPartyButton" class="btn btn-success" input type="submit" data-inline="true" value="Create Party!"> Create Party! </button>
+    </div>
+  </form>
+</div>

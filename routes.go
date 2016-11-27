@@ -30,6 +30,13 @@ var routes = Routes{
 		CreatePartyController,
 	},
 
+	Route {
+		"FindParties",
+		"POST",
+		"/findparties",
+		FindParties,
+		},
+
 	Route{
 		"AuthorizeSpotify",
 		"GET",
@@ -83,6 +90,7 @@ var routes = Routes{
 		"/gethostparties",
 		GetHostParties,
 	},
+
 }
 
 func NewRouter() *mux.Router {
