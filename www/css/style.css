@@ -127,6 +127,13 @@ html, body, *{
   margin-top:50px;
 }
 
+.recommended-track-table{
+  width:95%;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:50px;
+}
+
 .track-record{
   cursor:pointer;
   border-bottom:1px solid lightgray;

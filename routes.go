@@ -78,6 +78,14 @@ var routes = Routes{
 		"/viewplaylist",
 		ViewPlaylist,
 	},
+
+	Route{
+		"FindRecommendedSongs",
+		"GET",
+		"/findrecommendedsongs",
+		FindRecommendedSongs,
+	},
+
 	Route{
 		"RenderPlaylist",
 		"GET",
