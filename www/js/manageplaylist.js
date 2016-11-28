@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Global Variables */
 var trackList, playlistView;
 var GLOBAL_LIST= [];
