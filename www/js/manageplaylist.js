@@ -3,15 +3,6 @@ var trackList, playlistView;
 var GLOBAL_LIST= [];
 
 $(document).ready(function(){
-
-	/*
-  $.get("/viewplaylist").done(function(data){
-    var d = JSON.parse(data);
-    for (var i = 0; i < d.length; i++)
-      $(".track-table").append(d[i].track["name"]);
-  });
-	*/
-
   // Track Model
   var TrackItem = Backbone.Model.extend({
     defaults: {
@@ -99,14 +90,107 @@ $(document).ready(function(){
   playlistView.model.fetch().done(function() {
     playlistView.render();
   });
+
+  // --------------------- recommended ----------------------- //
+  // Track Model
+  var RecommendedTrackItem = Backbone.Model.extend({
+    defaults: {
+      id:'',
+      name:'',
+      artists:'',
+    }
+  });
+
+  // Track Collection (Track List)
+  var RecommendedTrackList = Backbone.Collection.extend({
+      url : '/findrecommendedsongs'
+  });
+
+  // Instantiate a new Track Collection
+  recommendedTrackList = new RecommendedTrackList();
+
+  // View for one Track Item row
+  var RecommendedTrackItemView = Backbone.View.extend({
+    model: new RecommendedTrackItem(),
+    tagName: 'tr',
+    className: 'recommended-track-record',
+    events: {
+      "click td.add-track": "addTrack"
+    },
+    initialize: function() {
+      this.template = _.template($('.recommended-track-list-template').html())
+    },
+    addTrack: function(e) {
+      e.preventDefault();
+      $("#song-list").html('');
+      var track_id = this.model.get('id');
+      $.post("/addsong", {trackId:track_id}).done(function(data){
+        // TODO add to tr
+      //$(this.$el).css("background-color","green");
+        alert(data);
+      // console.log(data);
+  });
+    },
+    render: function() {
+      this.$el.html(this.template(this.model));
+      return this;
+    }
+  });
+
+  // View for entire Track List
+  var RecommendedTrackListView = Backbone.View.extend({
+    model: recommendedTrackList, //collection
+    el: $(".recommended-track-table"),
+    initialize: function() {
+      var self = this;
+    },
+    render: function() {
+      var self = this;
+      this.$el.html('');
+      this.$el.append('<tr><th class="track-column-header">Track Name</th><th class="track-column-header">Artist</th></tr>');
+      var count = 1;
+      if (this.model.toArray().length == 0) {
+        self.$el.append("<h5>0 tracks found!</h5>");
+        return this;
+      }
+      console.log(this.model);
+      _.each(this.model.models[0].attributes.tracks, function(track) {
+        var trackString = JSON.stringify(track);
+        var trackJson = JSON.parse(trackString);
+        console.log(trackJson);
+        var artistString ='';
+          artistString = track.artists.map(function (obj) {
+            return obj.name;
+          }).join(', ');
+        track.artists = artistString;
+        self.$el.append((new RecommendedTrackItemView({
+          model: track
+        })).render().$el);
+      });
+      return this;
+    }
+  });
+
+  recommendedTrackListView = new RecommendedTrackListView();
+
 });
 
+// function searchSong() {
+//   var queryString = $("#search-song").val();
+//   trackListView.model.fetch({data: {searchsong: queryString}, processData: true}).done(function() {
+//     trackListView.render();
+//   });
+// }
+
 function findRecommendedSongs() {
-  $.get("/findrecommendedsongs").done(function(data) {
-      console.log(data);
-      var d = JSON.parse(data);
-      console.log(d);
-      for (var i = 0; i < d.tracks.length; i++)
-          $(".recommended-track-table").append(d.tracks[i]["name"]);
+  recommendedTrackListView.model.fetch().done(function() {
+    recommendedTrackListView.render();
+
+
+      // console.log(data);
+      // var d = JSON.parse(data);
+      // console.log(d);
+      // for (var i = 0; i < d.tracks.length; i++)
+      //     $(".recommended-track-table").append(d.tracks[i]["name"]);
   });
 }
