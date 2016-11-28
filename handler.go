@@ -125,6 +125,14 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 	checkErr(err)
 }
 
+func RenderDashboard(rw http.ResponseWriter, r *http.Request) {
+		t, err := template.ParseFiles("www/dashboard.html")
+	checkErr(err)
+
+	err = t.Execute(rw, Spotify_User_Object)
+	checkErr(err)
+}
+
 func RenderSearch(rw http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadFile("www/search.html")
 	fmt.Fprint(rw, string(body))
@@ -320,6 +328,9 @@ func ViewPlaylist(rw http.ResponseWriter, r *http.Request) {
 }
 
 func RenderPlaylist(rw http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	var playlistId = r.FormValue("playlist_id")
+	pc.PlaylistId = playlistId;
 	body, _ := ioutil.ReadFile("www/playlist.html")
 	fmt.Fprint(rw, string(body))
 }

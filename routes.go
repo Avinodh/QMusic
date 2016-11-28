@@ -90,7 +90,12 @@ var routes = Routes{
 		"/gethostparties",
 		GetHostParties,
 	},
-
+	Route{
+		"RenderDashboard",
+		"GET",
+		"/renderdashboard",
+		RenderDashboard,
+	},
 }
 
 func NewRouter() *mux.Router {

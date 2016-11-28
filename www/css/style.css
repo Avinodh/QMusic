@@ -155,7 +155,7 @@ html, body, *{
   width:45%;
 }
 
-.add-track{
+.add-track, .remove-track{
   width:3%;
   padding-left:10px;
   padding-right:10px;
@@ -364,4 +364,8 @@ html, body, *{
   visibility: visible;
   -webkit-animation: fadeIn 1s;
   animation: fadeIn 1s;
+}
+
+.playlist-template{
+
 }

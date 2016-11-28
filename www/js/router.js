@@ -3,7 +3,7 @@ function openSearch() {
 }
 
 function openDashboard() {
-  window.location = "dashboard.html";
+  window.location = "renderdashboard";
 }
 
 function viewCreateParty() {
