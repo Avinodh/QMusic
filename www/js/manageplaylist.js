@@ -122,14 +122,11 @@ $(document).ready(function(){
     },
     addTrack: function(e) {
       e.preventDefault();
-      $("#song-list").html('');
-      var track_id = this.model.get('id');
-      $.post("/addsong", {trackId:track_id}).done(function(data){
+      var track_id = this.model.id;
+      $.post("/addsong", {trackId: track_id}).done(function(data){
         // TODO add to tr
-      //$(this.$el).css("background-color","green");
         alert(data);
-      // console.log(data);
-  });
+      });
     },
     render: function() {
       this.$el.html(this.template(this.model));
