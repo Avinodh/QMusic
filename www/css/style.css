@@ -127,6 +127,13 @@ html, body, *{
   margin-top:50px;
 }
 
+.recommended-track-table{
+  width:95%;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:50px;
+}
+
 .track-record{
   cursor:pointer;
   border-bottom:1px solid lightgray;
@@ -155,7 +162,7 @@ html, body, *{
   width:45%;
 }
 
-.add-track{
+.add-track, .remove-track{
   width:3%;
   padding-left:10px;
   padding-right:10px;
@@ -364,4 +371,8 @@ html, body, *{
   visibility: visible;
   -webkit-animation: fadeIn 1s;
   animation: fadeIn 1s;
+}
+
+.playlist-template{
+
 }

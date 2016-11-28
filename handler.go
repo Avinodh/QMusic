@@ -18,9 +18,10 @@ import (
 	"html/template"
 	"io/ioutil"
 	"net/http"
-	_ "net/url"
+	"net/url"
 	"os"
 	"strings"
+	"log"
 )
 
 var (
@@ -36,6 +37,12 @@ func init() {
 	db, dberr = sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if dberr != nil {
 		panic(dberr)
+	}
+
+	p, _ := db.Prepare("INSERT INTO party VALUES ($1, $2, $3, $4, $5, $6, $7)")
+	_, e := p.Exec("1","2","3","4","5","6","7")
+	if e != nil {
+		panic(e)
 	}
 	/**********************************************************/
 	store.Options = &sessions.Options{
@@ -90,6 +97,7 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 
 	respBody, _ := ioutil.ReadAll(resp.Body)
 
+	log.Printf("%s", respBody)
 	err = json.Unmarshal(respBody, &Spotify_Auth_Object)
 
 	session.Values["spotify_access_token"] = &Spotify_Auth_Object.AccessToken
@@ -111,6 +119,9 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	pc = new(Party_Controller)
+	pc.PartyHostUserId = Spotify_User_Object.Id
+
 	Spotify_User_Object.DisplayPic = Spotify_User_Object.ProfilePic[0].Url
 	/******************************************/
 
@@ -123,6 +134,18 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 
 	err = t.Execute(rw, Spotify_User_Object)
 	checkErr(err)
+}
+
+func RenderDashboard(rw http.ResponseWriter, r *http.Request) {
+		t, err := template.ParseFiles("www/dashboard.html")
+	checkErr(err)
+
+	err = t.Execute(rw, Spotify_User_Object)
+	checkErr(err)
+}
+
+func GetCurrentPlaylist(rw http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(rw, pc.PlaylistId)
 }
 
 func RenderSearch(rw http.ResponseWriter, r *http.Request) {
@@ -149,7 +172,7 @@ func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
 	resBody, _ := ioutil.ReadAll(res.Body)
 
 	/***** Fetch newly created Playlist details *****/
- 
+
 	var playlist Playlist
 	err := json.Unmarshal([]byte(resBody), &playlist)
 	if err != nil {
@@ -158,7 +181,7 @@ func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
 	/************************************************/
 
 
-	pc = TheMasterController.AddPartyController(r.Form["secret-code"][0])
+	// pc = TheMasterController.AddPartyController(r.Form["secret-code"][0])
 	pc.CreateParty(r, playlist.Id)
 
 	/*body, _ := ioutil.ReadFile("www/search.html")
@@ -170,7 +193,7 @@ func SearchSong(rw http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	var query = r.FormValue("searchsong")
 
-	getTrackUrl := fmt.Sprintf("https://api.spotify.com/v1/search?q=%s&type=track", query)
+	getTrackUrl := fmt.Sprintf("https://api.spotify.com/v1/search?q=%s&type=track", url.QueryEscape(query))
 
 	httpClient := &http.Client{}
 	req, _ := http.NewRequest("GET", getTrackUrl, nil)
@@ -185,6 +208,46 @@ func SearchSong(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	jsonResult, _ := json.Marshal(result.Tracks.Items)
+	fmt.Fprint(rw, string(jsonResult))
+}
+
+func FindRecommendedSongs(rw http.ResponseWriter, r *http.Request) {
+	getTrackUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists/%s/tracks", pc.PartyHostUserId, pc.PlaylistId)
+	httpClient := &http.Client{}
+	authHeader := fmt.Sprintf("Bearer %s", Spotify_Auth_Object.AccessToken)
+	req, _ := http.NewRequest("GET", getTrackUrl, nil)
+
+	req.Header.Set("Authorization", authHeader)
+	res, _ := httpClient.Do(req)
+	resBody, _ := ioutil.ReadAll(res.Body)
+
+	var result ViewTracks
+	err := json.Unmarshal([]byte(resBody), &result)
+	if err != nil {
+		panic(err)
+	}
+
+	// Need at least one song
+	songId, _ := json.Marshal(result.Items[0].TrackItem.Id)
+
+	getRecommendedUrl := fmt.Sprintf("https://api.spotify.com/v1/recommendations?seed_tracks=%s&market=US", songId[1:len(songId)-1])
+
+	httpClient = &http.Client{}
+	req, _ = http.NewRequest("GET", getRecommendedUrl, nil)
+
+	req.Header.Set("Authorization", authHeader)
+	res, _ = httpClient.Do(req)
+	resBody, _ = ioutil.ReadAll(res.Body)
+	log.Printf("%s\n%s", songId, getRecommendedUrl)
+
+	var recommendedResult ViewRecommendedTracks
+	err = json.Unmarshal([]byte(resBody), &recommendedResult)
+	if err != nil {
+		panic(err)
+	}
+
+	jsonResult, _ := json.Marshal(recommendedResult)
+	log.Printf("\n\n\n%s\n%s\n%s\n%s\n\n\n", jsonResult, resBody, req, recommendedResult)
 	fmt.Fprint(rw, string(jsonResult))
 }
 
@@ -276,7 +339,7 @@ func FindParties(rw http.ResponseWriter, r *http.Request) {
 	defer p.Close()
 	defer rows.Close()
 
-	
+
 	//	if err := json.NewEncoder(rw).Encode(hostParties); err != nil {
 		//	panic(err)
 	//}
@@ -320,8 +383,46 @@ func ViewPlaylist(rw http.ResponseWriter, r *http.Request) {
 }
 
 func RenderPlaylist(rw http.ResponseWriter, r *http.Request) {
-	body, _ := ioutil.ReadFile("www/playlist.html")
-	fmt.Fprint(rw, string(body))
+	r.ParseForm()
+	var playlistId = r.FormValue("playlist_id")
+	pc.PlaylistId = playlistId
+	var (
+		hostParty HostParty
+		party_name string
+		party_location string
+		active_time string
+	)
+	row := db.QueryRow("SELECT active_time, party_name, party_location from party WHERE playlist_id=$1", pc.PlaylistId)
+	err := row.Scan(&active_time, &party_name, &party_location)
+
+	hostParty = HostParty{ActiveTime: active_time, PartyName: party_name, PartyLocation: party_location}
+
+	t, err := template.ParseFiles("www/playlist.html")
+	checkErr(err)
+
+	err = t.Execute(rw, hostParty)
+	checkErr(err)
+}
+
+func RemoveTrack(rw http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	var trackId = r.FormValue("trackId")
+
+	removeFromPlaylistUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists/%s/tracks", pc.PartyHostUserId, pc.PlaylistId)
+	params := fmt.Sprintf("{\"tracks\":[{\"uri\":\"spotify:track:%s\"}]}", trackId)
+	reader := strings.NewReader(params)
+	req, _ := http.NewRequest("DELETE", removeFromPlaylistUrl, reader)
+
+	// DELETE request to add track to playlist
+	httpClient := &http.Client{}
+	authHeader := fmt.Sprintf("Bearer %s", Spotify_Auth_Object.AccessToken)
+	req.Header.Set("Authorization", authHeader)
+	_, err := httpClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Fprint(rw, "Successfully Deleted Song!")
 }
 
 /************** BEGIN SECTION: HELPER FUNCTIONS *************/

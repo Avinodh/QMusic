@@ -24,8 +24,18 @@ $(document).ready(function() {
   var PartyItemView = Backbone.View.extend({
     model: new PartyItem(),
     tagName: 'span',
+    events: {
+      "click .party-object": "openPlaylist"
+    },
     initialize: function() {
       this.template = _.template($('.party-object-template').html())
+    },
+    openPlaylist: function(e) {
+      e.preventDefault();
+      var playlistId = this.model.get('playlist_id');
+      console.log("PLaylist Id: "+playlistId);
+
+      window.location = "/playlist?playlist_id="+playlistId;
     },
     render: function() {
       this.$el.html(this.template(this.model.toJSON()));

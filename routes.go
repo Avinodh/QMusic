@@ -78,6 +78,14 @@ var routes = Routes{
 		"/viewplaylist",
 		ViewPlaylist,
 	},
+
+	Route{
+		"FindRecommendedSongs",
+		"GET",
+		"/findrecommendedsongs",
+		FindRecommendedSongs,
+	},
+
 	Route{
 		"RenderPlaylist",
 		"GET",
@@ -90,7 +98,24 @@ var routes = Routes{
 		"/gethostparties",
 		GetHostParties,
 	},
-
+	Route{
+		"RenderDashboard",
+		"GET",
+		"/renderdashboard",
+		RenderDashboard,
+	},
+	Route{
+		"GetCurrentPlaylist",
+		"GET",
+		"/currentplaylist",
+		GetCurrentPlaylist,
+	},
+	Route{
+		"RemoveTrack",
+		"POST",
+		"/removetrack",
+		RemoveTrack,
+	},
 }
 
 func NewRouter() *mux.Router {
