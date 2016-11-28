@@ -97,7 +97,7 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 
 	respBody, _ := ioutil.ReadAll(resp.Body)
 
-	// log.Printf("%s", respBody)
+	log.Printf("%s", respBody)
 	err = json.Unmarshal(respBody, &Spotify_Auth_Object)
 
 	session.Values["spotify_access_token"] = &Spotify_Auth_Object.AccessToken
@@ -213,18 +213,18 @@ func FindRecommendedSongs(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	// Need at least one song
-	songs, _ := json.Marshal(result.Items[0].Id)
+	songId, _ := json.Marshal(result.Items[0].TrackItem.Id)
 
-	getRecommendedUrl := fmt.Sprintf("https://api.spotify.com/v1/recommendations?seed_tracks=%s&market=US", songs)
+	getRecommendedUrl := fmt.Sprintf("https://api.spotify.com/v1/recommendations?seed_tracks=%s&market=US", songId)
 
-	httpClient := &http.Client{}
-	req, _ := http.NewRequest("GET", getTrackUrl, nil)
-	res, _ := httpClient.Do(req)
-	resBody, _ := ioutil.ReadAll(res.Body)
+	httpClient = &http.Client{}
+	req, _ = http.NewRequest("GET", getRecommendedUrl, nil)
+	res, _ = httpClient.Do(req)
+	resBody, _ = ioutil.ReadAll(res.Body)
 
 	var recommendedResult ViewRecommendedTracks
-	err := json.Unmarshal([]byte(resBody), &result)
-	if err != null {
+	err = json.Unmarshal([]byte(resBody), &recommendedResult)
+	if err != nil {
 		panic(err)
 	}
 
