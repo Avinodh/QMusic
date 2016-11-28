@@ -46,7 +46,7 @@ type ViewTrack struct {
 }
 
 type ViewRecommendedTracks struct {
-	Items []Tracks `json:"tracks"`
+	Items []Track `json:"tracks"`
 }
 
 type Playlist struct {
