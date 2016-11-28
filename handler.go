@@ -21,6 +21,7 @@ import (
 	_ "net/url"
 	"os"
 	"strings"
+	"log"
 )
 
 var (
@@ -36,6 +37,12 @@ func init() {
 	db, dberr = sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if dberr != nil {
 		panic(dberr)
+	}
+
+	p, _ := db.Prepare("INSERT INTO party VALUES ($1, $2, $3, $4, $5, $6, $7)")
+	_, e := p.Exec("1","2","3","4","5","6","7")
+	if e != nil {
+		panic(e)
 	}
 	/**********************************************************/
 	store.Options = &sessions.Options{
@@ -90,6 +97,7 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 
 	respBody, _ := ioutil.ReadAll(resp.Body)
 
+	// log.Printf("%s", respBody)
 	err = json.Unmarshal(respBody, &Spotify_Auth_Object)
 
 	session.Values["spotify_access_token"] = &Spotify_Auth_Object.AccessToken
@@ -149,7 +157,7 @@ func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
 	resBody, _ := ioutil.ReadAll(res.Body)
 
 	/***** Fetch newly created Playlist details *****/
- 
+
 	var playlist Playlist
 	err := json.Unmarshal([]byte(resBody), &playlist)
 	if err != nil {
@@ -185,6 +193,42 @@ func SearchSong(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	jsonResult, _ := json.Marshal(result.Tracks.Items)
+	fmt.Fprint(rw, string(jsonResult))
+}
+
+func FindRecommendedSongs(rw http.ResponseWriter, r *http.Request) {
+	getTrackUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists/%s/tracks", pc.PartyHostUserId, pc.PlaylistId)
+	httpClient := &http.Client{}
+	authHeader := fmt.Sprintf("Bearer %s", Spotify_Auth_Object.AccessToken)
+	req, _ := http.NewRequest("GET", getTrackUrl, nil)
+
+	req.Header.Set("Authorization", authHeader)
+	res, _ := httpClient.Do(req)
+	resBody, _ := ioutil.ReadAll(res.Body)
+
+	var result ViewTracks
+	err := json.Unmarshal([]byte(resBody), &result)
+	if err != nil {
+		panic(err)
+	}
+
+	// Need at least one song
+	songs, _ := json.Marshal(result.Items[0].Id)
+
+	getRecommendedUrl := fmt.Sprintf("https://api.spotify.com/v1/recommendations?seed_tracks=%s&market=US", songs)
+
+	httpClient := &http.Client{}
+	req, _ := http.NewRequest("GET", getTrackUrl, nil)
+	res, _ := httpClient.Do(req)
+	resBody, _ := ioutil.ReadAll(res.Body)
+
+	var recommendedResult ViewRecommendedTracks
+	err := json.Unmarshal([]byte(resBody), &result)
+	if err != null {
+		panic(err)
+	}
+
+	jsonResult, _ := json.Marshal(recommendedResult)
 	fmt.Fprint(rw, string(jsonResult))
 }
 
@@ -276,7 +320,7 @@ func FindParties(rw http.ResponseWriter, r *http.Request) {
 	defer p.Close()
 	defer rows.Close()
 
-	
+
 	//	if err := json.NewEncoder(rw).Encode(hostParties); err != nil {
 		//	panic(err)
 	//}

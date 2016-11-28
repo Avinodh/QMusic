@@ -45,6 +45,10 @@ type ViewTrack struct {
 	TrackItem Track `json:"track"`
 }
 
+type ViewRecommendedTracks struct {
+	Items []Tracks `json:"tracks"`
+}
+
 type Playlist struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
