@@ -4,9 +4,7 @@ $(document).ready(function(){
         for (var i = 0; i < d.length; i++)
             $(".track-table").append(d[i].track["name"]);
     });
-});
 
-$(document).ready(function(){
     $.get("/findrecommendedsongs").done(function(data) {
         var d = JSON.parse(data);
         for (var i = 0; i < d.length; i++)
