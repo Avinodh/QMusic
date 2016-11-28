@@ -12,19 +12,14 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
 
   <link href="css/style.css" rel="stylesheet" type="text/css"/>
+  <link href="css/overlay.css" rel="stylesheet" type="text/css"/>
   <script src="js/app.js"></script>
   <script src="js/router.js"></script>
-  <script>
-// When the user clicks on <div>, open the popup
-function myFunction() {
-    var popup = document.getElementById('myPopup');
-    popup.classList.toggle('show');
-    document.getElementById("usercode").focus();
-}
-</script>
+  <script src="js/popup.js"></script>
 </head>
 
 <body>
+  <div id="myPopup"></div>
   <section id="intro">
     <div class="navbar">
       <h6 class="menu-options" onclick="openSearch()">Search</h6>
@@ -40,17 +35,8 @@ function myFunction() {
       <button id="login-button" type="button" class="btn btn-primary action-btn" onclick="authSpotify()">Login As Party Host</button>
       <br>
 
-    <div class="popup" onclick="myFunction()"><button id="login-button" type="button" class="btn btn-primary action-btn">Login as Party Goer</button>
-  <span class="popuptext" id="myPopup">
-  <form action="/findparties" method="post">
-    <div class = "form-inline">
-<label for ="usercode"> Enter your party code! </label>
- <input type="text" class="form-control" id="usercode" name = "usercode" placeholder="Enter Code" autofocus="">
-    <button type="submit" class="btn btn-primary">Submit!</button>
+    <div class="popup" onclick="togglePopupPartyGoer()"><button id="login-button" type="button" class="btn btn-primary action-btn">Login as Party Goer</button>
     </div>
-
-  </form></span>
-</div>
     <!--  <a href = "partyGoerLogin.html"><button id="login-button" type="button" class="btn btn-primary action-btn">Login as Party Goer</button></a>
     -->
     </div>
