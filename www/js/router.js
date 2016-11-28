@@ -10,3 +10,9 @@ function viewCreateParty() {
     $(".dashboard-section").css("display", "none");
     $("#create-party-section").css("display", "block");
 }
+
+function openPlaylist() {
+     $.get("/currentplaylist", function(data){
+      window.location = "/playlist?playlist_id="+data;
+  });
+}

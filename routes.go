@@ -96,6 +96,18 @@ var routes = Routes{
 		"/renderdashboard",
 		RenderDashboard,
 	},
+	Route{
+		"GetCurrentPlaylist",
+		"GET",
+		"/currentplaylist",
+		GetCurrentPlaylist,
+	},
+	Route{
+		"RemoveTrack",
+		"POST",
+		"/removetrack",
+		RemoveTrack,
+	},
 }
 
 func NewRouter() *mux.Router {

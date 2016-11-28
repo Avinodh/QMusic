@@ -46,10 +46,9 @@ $(document).ready(function(){
       e.preventDefault();
       $("#song-list").html('');
       var track_id = this.model.get('id');
-
-      $.post("/removesong", {trackId:track_id}).done(function(data) {
-        alert(data);
+      $.post("/removetrack", {trackId:track_id}).done(function(data) {
   		});
+      this.$el.hide();
     },
     render: function() {
       this.$el.html(this.template(this.model.toJSON()));
@@ -58,7 +57,7 @@ $(document).ready(function(){
   });
 
   // View for entire Track List
-  var playlistView = Backbone.View.extend({
+  var PlaylistView = Backbone.View.extend({
     model: trackList, //collection
     el: $(".track-table"),
     initialize: function() {
@@ -77,14 +76,16 @@ $(document).ready(function(){
         var respString = JSON.stringify(o);
         var respJson = JSON.parse(respString);
         var track = respJson['track'];
-        this.id = track['id'];
-        this.name = track['name'];
-        var artistString ='';
+        var t_id = track['id'];
+        var t_name = track['name'];
+        var t_artists ='';
         for(aIndex in track.artists){
-          artistString += track.artists[aIndex].name + ' ';
+          t_artists += track.artists[aIndex].name + ' ';
         }
         o.set({
-            artists:artistString,
+            artists:t_artists,
+            id:t_id,
+            name:t_name,
         });
         self.$el.append((new TrackItemView({
           model: o
@@ -94,7 +95,7 @@ $(document).ready(function(){
     }
   });
 
-  playlistView = new playlistView();
+  playlistView = new PlaylistView();
   playlistView.model.fetch().done(function() {
     playlistView.render();});
 });

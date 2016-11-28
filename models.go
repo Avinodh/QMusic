@@ -65,16 +65,13 @@ type HostParty struct {
 }
 
 type Party_Controller struct {
-	Active          *HostParty
-	AuthToken       string
-	RefreshToken    string
 	PartyHostUserId string
 	PlaylistId      string
 }
 
-type Master_Controller struct {
+/* type Master_Controller struct {
 	PartyControllers map[string]*Party_Controller
-}
+}*/
 
 func (pc *Party_Controller) CreateParty(r *http.Request, playlistId string) bool {
 	var new_party *HostParty = new(HostParty)
@@ -84,15 +81,13 @@ func (pc *Party_Controller) CreateParty(r *http.Request, playlistId string) bool
 	new_party.SecretCode = r.Form["secret-code"][0]
 	new_party.ActiveTime = r.Form["active-time"][0]
 	new_party.PlaylistId = playlistId
-	pc.Active = new_party
-	pc.AuthToken = Spotify_Auth_Object.AccessToken
-	pc.RefreshToken = Spotify_Auth_Object.RefreshToken
+
 	pc.PartyHostUserId = Spotify_User_Object.Id
 	pc.PlaylistId = playlistId
 
 	/**** Saving to Database ****/
 	p, _ := db.Prepare("INSERT INTO partycontroller VALUES ($1, $2, $3, $4, $5)")
-	_, e := p.Exec(new_party.SecretCode, pc.AuthToken, pc.RefreshToken, pc.PartyHostUserId, pc.PlaylistId)
+	_, e := p.Exec(new_party.SecretCode, Spotify_Auth_Object.AccessToken, Spotify_Auth_Object.RefreshToken, pc.PartyHostUserId, pc.PlaylistId)
 	if e != nil {
 		panic(e)
 	}
@@ -106,7 +101,7 @@ func (pc *Party_Controller) CreateParty(r *http.Request, playlistId string) bool
 	return true
 }
 
-func (mc *Master_Controller) AddPartyController(id string) *Party_Controller {
+/*func (mc *Master_Controller) AddPartyController(id string) *Party_Controller {
 	mc.PartyControllers[id] = new(Party_Controller)
 	return mc.PartyControllers[id]
 }
@@ -115,12 +110,12 @@ func InitializeController() *Master_Controller {
 	mc = new(Master_Controller)
 	mc.PartyControllers = make(map[string]*Party_Controller)
 	return mc
-}
+}*/
 
-var TheMasterController = InitializeController()
+//var TheMasterController = InitializeController()
 var Spotify_Auth_Object Spotify_Auth
 var Spotify_User_Object Spotify_User
-var mc *Master_Controller
+//var mc *Master_Controller
 var pc *Party_Controller
 
 type HostParties []HostParty

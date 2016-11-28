@@ -18,7 +18,7 @@ import (
 	"html/template"
 	"io/ioutil"
 	"net/http"
-	_ "net/url"
+	"net/url"
 	"os"
 	"strings"
 )
@@ -111,6 +111,9 @@ func Dashboard(rw http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	pc = new(Party_Controller)
+	pc.PartyHostUserId = Spotify_User_Object.Id
+
 	Spotify_User_Object.DisplayPic = Spotify_User_Object.ProfilePic[0].Url
 	/******************************************/
 
@@ -131,6 +134,10 @@ func RenderDashboard(rw http.ResponseWriter, r *http.Request) {
 
 	err = t.Execute(rw, Spotify_User_Object)
 	checkErr(err)
+}
+
+func GetCurrentPlaylist(rw http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(rw, pc.PlaylistId)
 }
 
 func RenderSearch(rw http.ResponseWriter, r *http.Request) {
@@ -166,7 +173,7 @@ func CreatePartyController(rw http.ResponseWriter, r *http.Request) {
 	/************************************************/
 
 
-	pc = TheMasterController.AddPartyController(r.Form["secret-code"][0])
+	// pc = TheMasterController.AddPartyController(r.Form["secret-code"][0])
 	pc.CreateParty(r, playlist.Id)
 
 	/*body, _ := ioutil.ReadFile("www/search.html")
@@ -178,7 +185,7 @@ func SearchSong(rw http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	var query = r.FormValue("searchsong")
 
-	getTrackUrl := fmt.Sprintf("https://api.spotify.com/v1/search?q=%s&type=track", query)
+	getTrackUrl := fmt.Sprintf("https://api.spotify.com/v1/search?q=%s&type=track", url.QueryEscape(query))
 
 	httpClient := &http.Client{}
 	req, _ := http.NewRequest("GET", getTrackUrl, nil)
@@ -330,9 +337,44 @@ func ViewPlaylist(rw http.ResponseWriter, r *http.Request) {
 func RenderPlaylist(rw http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	var playlistId = r.FormValue("playlist_id")
-	pc.PlaylistId = playlistId;
-	body, _ := ioutil.ReadFile("www/playlist.html")
-	fmt.Fprint(rw, string(body))
+	pc.PlaylistId = playlistId
+	var (
+		hostParty HostParty
+		party_name string
+		party_location string
+		active_time string
+	)
+	row := db.QueryRow("SELECT active_time, party_name, party_location from party WHERE playlist_id=$1", pc.PlaylistId)
+	err := row.Scan(&active_time, &party_name, &party_location)
+
+	hostParty = HostParty{ActiveTime: active_time, PartyName: party_name, PartyLocation: party_location}
+
+	t, err := template.ParseFiles("www/playlist.html")
+	checkErr(err)
+
+	err = t.Execute(rw, hostParty)
+	checkErr(err)
+}
+
+func RemoveTrack(rw http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	var trackId = r.FormValue("trackId")
+
+	removeFromPlaylistUrl := fmt.Sprintf("https://api.spotify.com/v1/users/%s/playlists/%s/tracks", pc.PartyHostUserId, pc.PlaylistId)
+	params := fmt.Sprintf("{\"tracks\":[{\"uri\":\"spotify:track:%s\"}]}", trackId)
+	reader := strings.NewReader(params)
+	req, _ := http.NewRequest("DELETE", removeFromPlaylistUrl, reader)
+
+	// DELETE request to add track to playlist
+	httpClient := &http.Client{}
+	authHeader := fmt.Sprintf("Bearer %s", Spotify_Auth_Object.AccessToken)
+	req.Header.Set("Authorization", authHeader)
+	_, err := httpClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Fprint(rw, "Successfully Deleted Song!")
 }
 
 /************** BEGIN SECTION: HELPER FUNCTIONS *************/
