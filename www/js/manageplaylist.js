@@ -127,6 +127,7 @@ $(document).ready(function(){
         // TODO add to tr
         alert(data);
       });
+      this.$el.hide();
     },
     render: function() {
       this.$el.html(this.template(this.model));

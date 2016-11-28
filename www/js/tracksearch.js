@@ -37,7 +37,8 @@ $(document).ready(function() {
       //$(this.$el).css("background-color","green");
         alert(data);
       // console.log(data);
-  });
+      });
+      this.$el.hide();
     },
     render: function() {
       this.$el.html(this.template(this.model.toJSON()));
