@@ -144,6 +144,7 @@ $(document).ready(function(){
     },
     render: function() {
       var self = this;
+      $(".recommended-title").append("<h5>Recommended Tracks</h5>");
       this.$el.html('');
       this.$el.append('<tr><th class="track-column-header">Track Name</th><th class="track-column-header">Artist</th></tr>');
       var count = 1;

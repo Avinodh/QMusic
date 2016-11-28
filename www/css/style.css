@@ -121,14 +121,14 @@ html, body, *{
 }
 
 .track-table{
-  width:95%;
+  width:90%;
   margin-left:auto;
   margin-right:auto;
   margin-top:50px;
 }
 
 .recommended-track-table{
-  width:95%;
+  width:90%;
   margin-left:auto;
   margin-right:auto;
   margin-top:50px;
@@ -145,6 +145,20 @@ html, body, *{
 .track-record:hover{
   background-color: rgba(125,65,129,0.1);
 }
+
+.recommended-track-record {
+   cursor:pointer;
+  border-bottom:1px solid lightgray;
+  transition: all .20s ease-in-out;
+  -moz-transition: all .20s ease-in-out;
+  -webkit-transition: all .20s ease-in-out;
+  height:50px;
+}
+
+.recommended-track-record:hover {
+  background-color: rgba(125,65,129,0.1);
+}
+
 .id{
   width:5%;
   border-right:1px solid lightgray;
@@ -373,6 +387,15 @@ html, body, *{
   animation: fadeIn 1s;
 }
 
-.playlist-template{
+.recommended-title {
+  margin-top:45px;
+  font-size:12px;
+  float:left;
+  margin-bottom:15px;
+}
 
+.party-location-title{
+  border-bottom: 2px solid lightgray;
+  width:45%;
+  padding-bottom:5px;
 }
