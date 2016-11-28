@@ -230,12 +230,15 @@ func FindRecommendedSongs(rw http.ResponseWriter, r *http.Request) {
 	// Need at least one song
 	songId, _ := json.Marshal(result.Items[0].TrackItem.Id)
 
-	getRecommendedUrl := fmt.Sprintf("https://api.spotify.com/v1/recommendations?seed_tracks=%s&market=US", songId)
+	getRecommendedUrl := fmt.Sprintf("https://api.spotify.com/v1/recommendations?seed_tracks=%s&market=US", songId[1:len(songId)-1])
 
 	httpClient = &http.Client{}
 	req, _ = http.NewRequest("GET", getRecommendedUrl, nil)
+
+	req.Header.Set("Authorization", authHeader)
 	res, _ = httpClient.Do(req)
 	resBody, _ = ioutil.ReadAll(res.Body)
+	log.Printf("%s\n%s", songId, getRecommendedUrl)
 
 	var recommendedResult ViewRecommendedTracks
 	err = json.Unmarshal([]byte(resBody), &recommendedResult)
@@ -244,6 +247,7 @@ func FindRecommendedSongs(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	jsonResult, _ := json.Marshal(recommendedResult)
+	log.Printf("\n\n\n%s\n%s\n%s\n%s\n\n\n", jsonResult, resBody, req, recommendedResult)
 	fmt.Fprint(rw, string(jsonResult))
 }
 

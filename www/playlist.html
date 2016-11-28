@@ -24,7 +24,7 @@
   <div id="popup"></div>
   <section id="search-intro">
     <div class="navbar">
-      <h6 class="menu-options" onclick="openSearch()">Search</h6>
+      <h6 class="menu-options" onclick="findRecommendedSongs()">Find Recommended</h6>
       <h6 class="menu-options" onclick="openDashboard()">Dashboard</h6>
     </div>
     <div class="header">
@@ -36,28 +36,15 @@
   </section>
 
   <section id="about">
+    <h1> {{.PartyName}} </h1>
+    <h5>{{.PartyLocation}}: {{.ActiveTime}}</h5>
     <div class="search-results">
       <table class="track-table">
       </table>
-
-      </div>
-      <div class="header">
-        <h1 class="header-title">Party Playlist</h1>
-        <h1 class="header-subtitle">Manage your playlist</h1>
-
-      </div>
-    </section>
-
-    <section id="about">
-      <h1> {{.PartyName}} </h1>
-      <h5>{{.PartyLocation}}: {{.ActiveTime}}</h5>
-      <div class="search-results">
-        <table class="track-table">
-        </table>
-        <table class="recommended-track-table">
-        </table>
-      </div>
-    </section>
+      <table class="recommended-track-table">
+      </table>
+    </div>
+  </section>
 
     <!-- BACKBONE.JS TEMPLATES FOR VARIOUS VIEWS -->
     <script type="text/template" class="playlist-template">

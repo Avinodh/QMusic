@@ -1,15 +1,9 @@
-<<<<<<< HEAD
 /* Global Variables */
 var trackList, playlistView;
 var GLOBAL_LIST= [];
 
 $(document).ready(function(){
 
-  $.get("/findrecommendedsongs").done(function(data) {
-      var d = JSON.parse(data);
-      for (var i = 0; i < d.length; i++)
-          $(".recommended-track-table").append(d[i].track["name"]);
-  });
 	/*
   $.get("/viewplaylist").done(function(data){
     var d = JSON.parse(data);
@@ -103,5 +97,16 @@ $(document).ready(function(){
 
   playlistView = new PlaylistView();
   playlistView.model.fetch().done(function() {
-    playlistView.render();});
+    playlistView.render();
+  });
 });
+
+function findRecommendedSongs() {
+  $.get("/findrecommendedsongs").done(function(data) {
+      console.log(data);
+      var d = JSON.parse(data);
+      console.log(d);
+      for (var i = 0; i < d.tracks.length; i++)
+          $(".recommended-track-table").append(d.tracks[i]["name"]);
+  });
+}
