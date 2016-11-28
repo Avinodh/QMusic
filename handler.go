@@ -334,6 +334,8 @@ func FindParties(rw http.ResponseWriter, r *http.Request) {
 		hostParties = append(hostParties, hostParty)
 	}
 
+	pc.PlaylistId = playlist_id
+
 	err = rows.Err()
 	checkErr(err)
 	defer p.Close()

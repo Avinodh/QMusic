@@ -16,3 +16,7 @@ function openPlaylist() {
       window.location = "/playlist?playlist_id="+data;
   });
 }
+
+function logout() {
+    window.location = "/";
+}
